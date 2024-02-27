@@ -1,72 +1,52 @@
-<div class="flex-col items-center justify-center">
-  <p class="w-full text-5xl font-bold text-stoke-blue text-center">JoinUs</p>
-  <div class="w-full flex justify-between items-center pt-10"></div>
-  <div class="card">
-    <div style="padding-top: 2rem; display: flex">
-      <img
-        style="width: 80px; height: 60px"
+<div class="relative w-full body-content md:pb-6 md:px-24 flex flex-col items-center justify-center gap-6 overflow-hidden">
+  <p class="w-full text-5xl font-bold text-stoke-red text-center">JoinUs</p>
+  <div class="relative card p-6 w-full h-full flex flex-col items-center justify-center">
+    <div class="flex pt-4 md:pt-2 pb-4 md:py-0 md:pb-9 items-center justify-center">
+      <img style="width: 80px; height: 60px"
         src="data:image/png;base64,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"
-        alt=""
-      />
-      <p class="w-full text-6xl font-bold text-stoke-blue text-center">
+        alt="" />
+      <p class="w-full text-4xl md:text-6xl font-bold text-stoke-blue text-center">
         SignUp
       </p>
     </div>
-    <div>
-      <span class="material-symbols-outlined"> arrow_left_alt </span>
-    </div>
-    <div style="padding-top: 4rem">
-      <div
-        style="
-          padding-top: 1rem;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        "
-      >
-        <p style="padding-right: 1rem; font-size: 24px"><b>Username</b></p>
-        <input class="input" type="text" placeholder="Username :" />
+    <div class="w-full h-full flex flex-col justify-center items-center overflow-hidden text-2xl gap-1">
+      <div class="w-full px-6 md:flex justify-center items-center">
+        <p style="padding-right: 1rem; "><b>Username</b></p>
+        <input class="w-full max-w-[30rem] input" type="text" placeholder="Username :" />
       </div>
-      <div style="padding-top: 0.5rem; display: flex; justify-content: center">
-        <p style="padding-right: 1rem; font-size: 24px"><b>Password</b></p>
-        <input class="input" type="text" placeholder="Password :" />
+      <div class="w-full px-6 pt-2 md:flex justify-center items-center">
+        <p style="padding-right: 1rem; "><b>Password</b></p>
+        <input class="w-full max-w-[30rem] input" type="text" placeholder="Password :" />
       </div>
-      <div style="padding-top: 0.5rem; display: flex; justify-content: center">
-        <p style="padding-right: 1rem; font-size: 24px">
-          <b>Confirm Password</b>
-        </p>
-        <input class="input" type="text" placeholder="Password :" />
+      <div class="w-full px-6 pt-2 md:flex justify-center items-center">
+        <p class="md:w-32" style="padding-right: 1rem; "><b>Confirm Password</b></p>
+        <input class="w-full max-w-[30rem] input" type="text" placeholder="Confirm Password" />
       </div>
-      <div style="padding-top: 1rem; display: flex; justify-content: center">
-        <div
-          style="
-            background-color: white;
-            width: 450px;
-            height: 150px;
-            border-radius: 5px;
-          "
-        >
-          <div
-            style="
+      <div class="w-full cursor-pointer select-none" style="padding-top: 1rem; display: flex; justify-content: center">
+        <div class="w-80 md:w-96 h-36 md:h-40 rounded-2xl overflow-hidden bg-white">
+          <div style="
               height: 100%;
               display: flex;
               justify-content: center;
               align-items: center;
-            "
-          >
+            ">
             <img
               src="data:image/png;base64,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"
-              alt=""
-            />
-            <p style="font-size: 32px; color: #436af6"><b>Upload Image</b></p>
+              alt="" />
+            <p style="color: #436af6"><b>Upload Image</b></p>
           </div>
         </div>
       </div>
+      <div style="padding-top: 1rem; display: flex; justify-content: center">
+        <button class="text-stoke-red button font-bold text-center">
+          SignUp
+        </button>
+      </div>
     </div>
-    <div style="padding-top: 1rem; display: flex; justify-content: center">
-      <button class="text-stoke-red button font-bold text-center">
-        SignUp
-      </button>
-    </div>
+    <!-- arrow router link to "/joinUs" -->
+    <a routerLink="/join"
+      class="cursor-pointer absolute top-6 left-6 text-4xl md:text-6xl text-stoke-red rotate-90 text-[#436af6]">
+      <fa-icon [icon]="faArrowDown" />
+    </a>
   </div>
 </div>

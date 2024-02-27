@@ -9,9 +9,9 @@
 }
 
 .card {
-  width: 1050px;
-  height: 680px;
-  //   background-color: #f64363;
+  // width: 1050px;
+  // height: 680px;
+  // //   background-color: #f64363;
   background-color: rgba(246, 67, 99, 0.3);
   border-radius: 5px;
   border: 3px solid #f64363; /* Added border color */
@@ -29,16 +29,14 @@
 .input {
   border-radius: 15px;
   border: 3px solid #f64363; /* Added border color */
-  width: 400px;
-  height: 50px;
   color: #000;
   padding-left: 1rem;
   font-weight: bold;
   font-size: 24px;
+  height: 50px;
 }
 
 .button {
-  width: 330px;
   height: 60px;
   background-color: #f64363;
   font-size: 32px;
