@@ -17,14 +17,14 @@
 }
 
 .input {
-  border-radius: 15px;
   border: 3px solid #436af6; /* Added border color */
   // width: 400px;
-  height: 50px;
+  // height: 50px;
   color: #000;
-  padding-left: 1rem;
+  border-radius: 15px;
+  padding-left: 0.5rem;
   font-weight: bold;
-  font-size: 24px;
+  font-size: 16px;
 }
 
 .button {

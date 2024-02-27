@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faBars, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { StorageService } from '../../services/storage.service';
 import { NavbarUserComponent } from '../navbar-user/navbar-user.component';
 
 @Component({
@@ -12,8 +13,15 @@ import { NavbarUserComponent } from '../navbar-user/navbar-user.component';
   styleUrl: './navbar.component.scss',
   imports: [RouterModule, FontAwesomeModule, CommonModule, NavbarUserComponent],
 })
-export class NavbarComponent {
+export class NavbarComponent implements OnInit {
   faBars = faBars;
   faTimes = faTimes;
   isOpened: boolean = false;
+  isLoggedIn: boolean = false;
+
+  constructor(private storageService: StorageService) {}
+
+  ngOnInit(): void {
+    this.isLoggedIn = this.storageService.isLoggedIn();
+  }
 }
