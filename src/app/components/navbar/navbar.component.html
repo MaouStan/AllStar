@@ -8,18 +8,20 @@
 
   <!-- items expand -->
   <div class="hidden md:flex w-auto h-full justify-end items-center text-white text-xl space-x-4">
-    <a routerLink="/" [routerLinkActive]="'border-b-2 border-[#F64363]'" class="hover:text-[#f64363]">Home</a>
-    <a routerLink="/ranks" [routerLinkActive]="'border-b-2 border-[#F64363]'" class="hover:text-[#f64363]">Ranks</a>
+    <a routerLink="/" [routerLinkActive]="'border-b-2 border-[#F64363]'" class="hover:text-[#f64363]"
+      (click)="isOpened = false">Home</a>
+    <a routerLink="/ranks" [routerLinkActive]="'border-b-2 border-[#F64363]'" class="hover:text-[#f64363]"
+      (click)="isOpened = false">Ranks</a>
     <a routerLink="/join"
       class="text-[#F64363] border-[#F64363] text-base border-2 px-3 py-0.5 rounded-tl-[1.5rem] rounded-br-[1.5rem] hover:bg-[#f64363] hover:text-white"
-      [routerLinkActive]="'border-b-2 border-[#F64363]'">
+      [routerLinkActive]="'border-b-2 border-[#F64363]'" (click)="isOpened = false">
       Join Us
     </a>
   </div>
 
   <!-- Hamburger -->
   <div class="w-auto h-full flex items-center justify-end md:hidden">
-    <button (click)="this.isOpened=!this.isOpened" class="text-white text-4xl hover:text-[#f64363]">
+    <button (click)="isOpened = !isOpened" class="text-white text-4xl hover:text-[#f64363]">
       <fa-icon [icon]="faBars"></fa-icon>
     </button>
   </div>
@@ -29,15 +31,16 @@
 <div [class]="'fixed inset-0 z-50 md:hidden'" *ngIf="isOpened">
   <div
     class="relative h-screen w-screen gap-12 text-center text-4xl p-6 pt-24 flex flex-col justify-start items-center mx-auto bg-slate-600">
-    <a routerLink="/" [routerLinkActive]="'border-b-2 border-[#F64363]'" class="w-full hover:text-[#f64363]">Home</a>
-    <a routerLink="/ranks" [routerLinkActive]="'border-b-2 border-[#F64363]'"
-      class="w-full hover:text-[#f64363]">Ranks</a>
+    <a routerLink="/" [routerLinkActive]="'border-b-2 border-[#F64363]'" class="w-full hover:text-[#f64363]"
+      (click)="isOpened = false">Home</a>
+    <a routerLink="/ranks" [routerLinkActive]="'border-b-2 border-[#F64363]'" class="w-full hover:text-[#f64363]"
+      (click)="isOpened = false">Ranks</a>
     <a routerLink="/join"
       class="w-full text-[#F64363] border-[#F64363] border-2 px-3 py-3 rounded-tl-[1.5rem] rounded-br-[1.5rem] hover:bg-[#f64363] hover:text-white"
-      [routerLinkActive]="'border-b-2 border-[#F64363]'">Join Us</a>
+      [routerLinkActive]="'border-b-2 border-[#F64363]'" (click)="isOpened = false">Join Us</a>
 
     <!-- icon close font-a -->
-    <fa-icon (click)="this.isOpened=!this.isOpened" [icon]="faTimes"
+    <fa-icon (click)="isOpened = !isOpened" [icon]="faTimes"
       class="cursor-pointer absolute top-6 right-6 text-4xl text-stoke-red rotate-90 text-[#f64363]"></fa-icon>
   </div>
 </div>

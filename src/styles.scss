@@ -40,9 +40,10 @@ body {
 }
 
 .body-content {
+  min-height: calc(100% - 7rem);
   min-height: calc(100vh - 7rem);
   min-height: calc(100dvh - 7rem);
-  // height: calc(100dvh - 7rem);
+  height: calc(100% - 7rem);
 }
 
 .text-stoke-red {

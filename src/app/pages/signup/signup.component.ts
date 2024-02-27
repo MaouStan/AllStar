@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterLink } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faArrowDown } from '@fortawesome/free-solid-svg-icons';
+import { faArrowDown, faCloudArrowDown } from '@fortawesome/free-solid-svg-icons';
 @Component({
   selector: 'app-signup',
   standalone: true,
@@ -12,4 +12,5 @@ import { faArrowDown } from '@fortawesome/free-solid-svg-icons';
 })
 export class SignUpComponent {
   faArrowDown = faArrowDown;
+  faCloudArrowDown = faCloudArrowDown;
 }
