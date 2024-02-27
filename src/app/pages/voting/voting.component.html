@@ -1,12 +1,38 @@
-<main class="relative w-full h-full container mx-auto">
-  <app-navbar />
+<div class="w-full h-full flex-col items-center justify-center">
+  <p class="w-full text-5xl font-bold text-stoke-red text-center">
+    Best Anime Star
+  </p>
+  <div class="w-full flex justify-between items-center pt-36">
+    <div
+      [class]="
+        'w-96 h-[35rem] overflow-hidden bg-white/50 rounded-xl border-[#f64363] border-2 flex flex-col justify-start items-center'
+      "
+    >
+      <div
+        class="w-full h-16 bg-white/50 flex justify-start items-center p-2 space-x-2"
+      >
+        <div class="size-12 bg-white rounded-full"></div>
+        <p [class]="'text-xl text-[#f64363] text-stroke-white'">MaouStan</p>
+      </div>
 
-  <div class="w-full h-[100%-7rem] flex flex-col items-center justify-center">
-    <p class="w-full text-5xl font-bold text-stoke-red text-center">Best Anime Star</p>
-    <div class="w-full flex justify-between items-center pt-36">
-      <app-card-1 />
-      <p>VS</p>
-      <app-card-1 />
+      <!-- image -->
+      <div class="w-full h-full bg-white"></div>
+    </div>
+    <p>VS</p>
+    <div
+      [class]="
+        'w-96 h-[35rem] overflow-hidden bg-white/50 rounded-xl border-[#436AF6] border-2 flex flex-col justify-start items-center'
+      "
+    >
+      <div
+        class="w-full h-16 bg-white/50 flex justify-start items-center p-2 space-x-2"
+      >
+        <div class="size-12 bg-white rounded-full"></div>
+        <p [class]="'text-xl text-[#436AF6] text-stroke-white'">MaouStan</p>
+      </div>
+
+      <!-- image -->
+      <div class="w-full h-full bg-white"></div>
     </div>
   </div>
-</main>
+</div>
