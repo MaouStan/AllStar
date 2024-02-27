@@ -1,7 +1,4 @@
-<nav
-  class="w-full h-28 flex justify-between items-center p-2"
-  *ngIf="!isSigned; else logged"
->
+<nav class="w-full h-28 flex justify-between items-center p-2">
   <div class="w-auto h-full flex items-center justify-start">
     <!-- Logo -->
     <a
@@ -26,6 +23,12 @@
       routerLink="/ranks"
       [routerLinkActive]="'border-b-2 border-[#F64363]'"
       class="hover:text-[#f64363]"
+      >Graph</a
+    >
+    <a
+      routerLink="/ranks"
+      [routerLinkActive]="'border-b-2 border-[#F64363]'"
+      class="hover:text-[#f64363]"
       >Ranks</a
     >
     <a
@@ -44,7 +47,3 @@
     </button>
   </div>
 </nav>
-
-<ng-template #logged>
-  <app-navbar-user />
-</ng-template>

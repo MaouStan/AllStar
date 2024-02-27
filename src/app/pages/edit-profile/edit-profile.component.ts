@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { NavbarEditComponent } from '../../components/navbar-edit/navbar-edit.component';
 import { MatButtonModule } from '@angular/material/button';
 @Component({
   selector: 'app-edit-profile',
