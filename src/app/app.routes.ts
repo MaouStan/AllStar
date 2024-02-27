@@ -5,6 +5,7 @@ import { ChangePasswordComponent } from './pages/change-password/change-password
 import { UploadComponent } from './pages/upload/upload.component';
 import { SignInComponent } from './pages/signin/signin.component';
 import { SignUpComponent } from './pages/signup/signup.component';
+import { JoinComponent } from './pages/join/join.component';
 
 export const routes: Routes = [
   // handle home
@@ -15,6 +16,7 @@ export const routes: Routes = [
   { path: 'upload', component: UploadComponent },
   { path: 'signin', component: SignInComponent },
   { path: 'signup', component: SignUpComponent },
+  { path: 'join', component: JoinComponent },
 
   // handle 404
   { path: '**', redirectTo: 'home' },

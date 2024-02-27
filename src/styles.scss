@@ -44,3 +44,13 @@ body {
   min-height: calc(100dvh - 7rem);
   // height: calc(100dvh - 7rem);
 }
+
+.text-stoke-red {
+  text-shadow: 5px 5px 0 #f64363, 1.1px -1.1px 0 #f64363, -1.1px 1.1px 0 #f64363,
+    1.1px 1.1px 0 #f64363;
+}
+
+.text-stoke-blue {
+  text-shadow: 5px 5px 0 #436af6, 1.1px -1.1px 0 #436af6, -1.1px 1.1px 0 #436af6,
+    1.1px 1.1px 0 #436af6;
+}
