@@ -19,17 +19,26 @@ th {
 
 /* Style the table data cells */
 td {
-  border: 1px solid #12184d;
-  background-color: #12184d;
+  // border: 1px solid #12184d;
+  // background-color: #12184d;
   padding: 8px;
   text-align: center;
 }
+
+tr:nth-child(odd) {
+  background-color: #12184d;
+}
+
+tr:nth-child(even) {
+  background-color: #252e7e; /* หรือสีอื่นๆ ที่ต้องการให้สลับกัน */
+}
+
 
 tr{
   border-radius: 100%;
 }
 
-img{
+.img{
     width: 100px;
     height: 100px;
     border-radius: 50%;
