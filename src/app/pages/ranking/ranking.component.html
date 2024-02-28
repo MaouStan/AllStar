@@ -1,0 +1,54 @@
+<main class="relative w-full h-full container mx-auto">
+    <app-navbar />
+
+    <div class="w-full h-[100%-7rem] flex flex-col items-center justify-center">
+        <p class="w-full text-5xl font-bold text-stoke-red text-center">Anime Ranking</p>
+        
+        <p style="padding-top: 4rem;" class="w-full text-5xl font-bold text-stoke-red text-center">#1</p>
+        <div class="w-full justify-between items-center flex">
+            <p style="padding-top: 4rem; padding-left: 20rem;" class="w-full text-5xl font-bold text-stoke-red">#2</p>
+            <p style="padding-top: 4rem; padding-left: 30rem;" class="w-full text-5xl font-bold text-stoke-red">#3</p>
+            <!-- style="display: flex; justify-content: end; -->
+        </div>
+
+        <div class="w-full flex justify-between items-center pt-10">
+            <div style="padding-bottom: 10rem;">
+                <app-card-1 />
+            </div>
+            <div style="padding-bottom: 10rem;">
+                <app-card-1 />
+            </div>
+            <div style="padding-bottom: 10rem;">
+                <app-card-1 />
+            </div>
+        </div>
+
+        <div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Name</th>
+                        <th>Rank</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><img src="https://i.pinimg.com/736x/6d/19/ef/6d19efefb4a82eda8e8eaa6908ca8d8f.jpg"></td>
+                        <td>Song Jin Woo</td>
+                        <td>4</td>
+                        <td>1000000</td>
+                    </tr>
+                    <tr>
+                        <td><img src="https://i.pinimg.com/736x/6d/19/ef/6d19efefb4a82eda8e8eaa6908ca8d8f.jpg"></td>
+                        <td>Player 2</td>
+                        <td>5</td>
+                        <td>900000</td>
+                    </tr>
+                    <!-- Add more rows as needed -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
