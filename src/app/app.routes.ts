@@ -9,20 +9,24 @@ import { SignUpComponent } from './pages/signup/signup.component';
 import { JoinComponent } from './pages/join/join.component';
 import { AuthService } from './services/auth.service';
 import { LogoutComponent } from './pages/logout/logout.component';
+import { RankingComponent } from './pages/ranking/ranking.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'home', component: VotingComponent },
   { path: 'edit1', component: EditComponent, canActivate: [AuthService] },
+  { path: 'ranking', component: RankingComponent },
+
+  { path: 'home', component: VotingComponent },
+  { path: 'edit', component: EditComponent },
   {
     path: 'change',
     component: ChangePasswordComponent,
-    canActivate: [AuthService],
   },
-  { path: 'upload', component: UploadComponent, canActivate: [AuthService] },
-  { path: 'signin', component: SignInComponent, canActivate: [AuthService] },
-  { path: 'signup', component: SignUpComponent, canActivate: [AuthService] },
-  { path: 'join', component: JoinComponent, canActivate: [AuthService] },
+  { path: 'upload', component: UploadComponent },
+  { path: 'signin', component: SignInComponent },
+  { path: 'signup', component: SignUpComponent },
+  { path: 'join', component: JoinComponent },
   { path: 'logout', component: LogoutComponent },
 
   // handle 404
