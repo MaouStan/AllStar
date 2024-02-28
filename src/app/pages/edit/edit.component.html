@@ -1,35 +1,32 @@
-<main class="relative w-full h-full container mx-auto">
-    <app-navbar-edit />
-
-    <div class="w-full h-[100%-7rem] flex flex-col items-center justify-center">
-        <p class="w-full text-5xl font-bold text-stoke-red text-center">Edit</p>
-        <div class="w-full flex justify-between items-center pt-10">
-        </div>
-        <div class="card">
-            <div>
-                <span class="material-symbols-outlined">
-                    arrow_left_alt
-                </span>
-            </div>
-            <div style="display: flex; justify-content: center;">
-                <div style="padding-top: 0.5rem;">
-                    <img class="img" src="https://i1.sndcdn.com/avatars-QYo5FTkrCj11aJZ7-vEA04Q-t500x500.jpg" alt="">
-                </div>
-            </div>
-            <div>
-                <div style="padding-top: 1rem; display: flex; justify-content: center;">
-                    <input class="input" type="text" placeholder="Name :">
-                </div>
-                <div style="padding-top: 1rem; display: flex; justify-content: center;">
-                    <input class="input" type="text" placeholder="Series :">
-                </div>
-                <div style="padding-top: 1rem; display: flex; justify-content: center;">
-                    <input class="input" type="text" placeholder="Description :">
-                </div>
-            </div>
-            <div style="padding-top: 1rem; display: flex; justify-content: center;">
-                <button class="button">Update</button>
-            </div>
-        </div>
+<div
+  class="relative w-full body-content md:pb-6 md:px-24 flex flex-col items-center justify-center gap-4 overflow-hidden">
+  <p class="w-full h-fit text-5xl font-bold text-stoke-red text-center mt-0">Edit</p>
+  <div class="relative card p-6 w-full h-full flex flex-col items-center justify-center mx-auto">
+    <div style="display: flex; justify-content: center">
+      <div style="padding-top: 0.5rem">
+        <img class="size-64 md:size-80 2xl:size-96 img"
+          src="https://i1.sndcdn.com/avatars-QYo5FTkrCj11aJZ7-vEA04Q-t500x500.jpg" alt="Image" />
+      </div>
     </div>
-</main>
+    <div class="w-full max-w-96">
+      <div class="w-full" style="padding-top: 1rem; display: flex; justify-content: center">
+        <input class="w-full input" type="text" placeholder="Name :" />
+      </div>
+      <div style="padding-top: 1rem; display: flex; justify-content: center">
+        <input class="w-full input" type="text" placeholder="Series :" />
+      </div>
+      <div style="padding-top: 1rem; display: flex; justify-content: center">
+        <textarea class="w-full input max-h-32 p-4" type="text" placeholder="Description :"></textarea>
+      </div>
+      <div class="w-full" style="padding-top: 1rem; display: flex; justify-content: center">
+        <button class="w-full button">Update</button>
+      </div>
+    </div>
+
+    <!-- arrow router link to "/joinUs" -->
+    <a routerLink="/join"
+      class="cursor-pointer absolute top-6 left-6 text-4xl md:text-6xl text-stoke-red rotate-90 text-[#f64363]">
+      <fa-icon [icon]="faArrowDown" />
+    </a>
+  </div>
+</div>

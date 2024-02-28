@@ -1,18 +1,8 @@
-.text-stoke-red {
-  text-shadow: 5px 5px 0 #f64363, 1.1px -1.1px 0 #f64363, -1.1px 1.1px 0 #f64363,
-    1.1px 1.1px 0 #f64363;
-}
-
-.text-stoke-blue {
-  text-shadow: 5px 5px 0 #436af6, 1.1px -1.1px 0 #436af6, -1.1px 1.1px 0 #436af6,
-    1.1px 1.1px 0 #436af6;
-}
-
 .card {
-  width: 1050px;
-  height: 680px;
-  //   background-color: #f64363;
-  background-color: rgba(246, 67, 99, 0.3);
+  // width: 1050px;
+  // height: 680px;
+  // //   background-color: #f64363;
+  background-color: #f643634d;
   border-radius: 5px;
   border: 3px solid #f64363; /* Added border color */
   box-shadow: 0 4px 8px #f64363;
@@ -29,12 +19,11 @@
 .input {
   border-radius: 15px;
   border: 3px solid #f64363; /* Added border color */
-  width: 400px;
-  height: 50px;
   color: #000;
   padding-left: 1rem;
   font-weight: bold;
   font-size: 24px;
+  height: 50px;
 }
 
 .button {

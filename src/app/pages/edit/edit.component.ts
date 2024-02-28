@@ -1,13 +1,16 @@
 import { Component } from '@angular/core';
-import { NavbarEditComponent } from '../../components/navbar-edit/navbar-edit.component';
-import { Card1Component } from '../../components/card-1/card-1.component';
 import { MatButtonModule } from '@angular/material/button';
+import { RouterLink } from '@angular/router';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faArrowDown } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-edit',
   standalone: true,
-  imports: [NavbarEditComponent, Card1Component, MatButtonModule],
+  imports: [MatButtonModule, RouterLink, FontAwesomeModule],
   templateUrl: './edit.component.html',
   styleUrl: './edit.component.scss',
 })
-export class EditComponent {}
+export class EditComponent {
+  faArrowDown = faArrowDown;
+}
