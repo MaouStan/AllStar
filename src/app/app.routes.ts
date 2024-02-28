@@ -29,8 +29,9 @@ export const routes: Routes = [
   { path: '**', redirectTo: 'home' },
 ];
 
+// Create the AppRoutingModule
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule],
+  imports: [RouterModule.forRoot(routes)], // Import the RouterModule and configure the routes
+  exports: [RouterModule], // Export the RouterModule to make it available for other modules
 })
 export class AppRoutingModule {}
