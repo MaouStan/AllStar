@@ -44,7 +44,10 @@ router.post("/", (req: Request, res: Response) => {
     sql,
     [user.username, user.password, user.imageURL],
     (err: MysqlError, result: OkPacket) => {
-      if (err) return res.status(500).json({ error: `Error ${err}` });
+      if (err)
+        return res
+          .status(500)
+          .json({ affectedRows: -1, message: `Error ${err}` });
       return res.status(200).json({
         affectedRows: result.affectedRows,
         message: "User created successfully!",

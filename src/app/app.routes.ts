@@ -9,6 +9,8 @@ import { JoinComponent } from './pages/join/join.component';
 import { AuthService } from './services/auth.service';
 import { LogoutComponent } from './pages/logout/logout.component';
 import { RankingComponent } from './pages/ranking/ranking.component';
+import { ProfileComponent } from './pages/profile/profile.component';
+import { ChartComponent } from './pages/chart/chart.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -19,7 +21,13 @@ export const routes: Routes = [
     component: ChangePasswordComponent,
     canActivate: [AuthService],
   },
-  { path: 'upload', component: UploadComponent},
+  {
+    path: 'profile/:id',
+    component: ProfileComponent,
+    canActivate: [AuthService],
+  },
+  { path: 'chart/:id', component: ChartComponent, canActivate: [AuthService] },
+  { path: 'upload', component: UploadComponent },
   { path: 'signin', component: SignInComponent, canActivate: [AuthService] },
   { path: 'signup', component: SignUpComponent, canActivate: [AuthService] },
   { path: 'join', component: JoinComponent, canActivate: [AuthService] },

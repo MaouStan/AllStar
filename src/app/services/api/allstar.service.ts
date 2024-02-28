@@ -10,6 +10,7 @@ import * as bcrypt from 'bcryptjs';
 import { imageUploadRequest } from '../../models/image-upload-req';
 import { PostApiResponse } from '../../models/post-api-res';
 import { ImageResponse } from '../../models/image-res';
+import { ImageCardResponse } from '../../models/image-card-res';
 
 @Injectable({
   providedIn: 'root',
@@ -54,7 +55,7 @@ export class AllStarService {
       )
     );
 
-    return response as UserNewRes;
+    return response as PostApiResponse;
   }
 
   // getUserById(id)
@@ -89,6 +90,17 @@ export class AllStarService {
     );
 
     return response as PostApiResponse;
+  }
+
+  // getImages
+  async getImageRandom(): Promise<ImageCardResponse[]> {
+    const response = await lastValueFrom(
+      this.http.get(
+        `${this.constants.API_ENDPOINT}/image/random?apikey=${this.constants.API_KEY}`
+      )
+    );
+
+    return response as ImageCardResponse[];
   }
 
   // getImagesFromUser

@@ -6,9 +6,12 @@ import { ImageRequest } from "image_post_req";
 export const router = express.Router();
 
 // Get Images
-router.get("/", (_req: Request, res: Response) => {
+router.get("/random", (_req: Request, res: Response) => {
   conn.query(
-    "SELECT * FROM allstarImages",
+    `SELECT allstarImages.*, allstarUsers.username, allstarUsers.image as userImage 
+     FROM allstarImages 
+     JOIN allstarUsers ON allstarImages.userId = allstarUsers.userId 
+     ORDER BY RAND() LIMIT 2`,
     (err: MysqlError | null, results: any) => {
       if (err) {
         return res.status(500).json({ message: err.message });
@@ -49,7 +52,7 @@ router.post("/", (_req: Request, res: Response) => {
     ],
     (err: MysqlError | null, results: any) => {
       if (err) {
-        return res.status(500).json({ message: err.message });
+        return res.status(500).json({ affectedRows: -1, message: err.message });
       }
 
       const message = results[0][0].Message;

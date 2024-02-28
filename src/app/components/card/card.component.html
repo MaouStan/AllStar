@@ -1,0 +1,30 @@
+<div class="relative pr-2 w-[21rem] mx-auto md:w-96 h-[32.5rem] lg:h-[35rem]">
+  <div
+    [class]="'w-full h-full mx-auto  overflow-hidden bg-white/50 rounded-xl border-['+ color +'] border-2 self-center flex flex-col justify-start items-center'">
+    <a [routerLink]="'/profile/'+data.userId"
+      class="w-full h-16 bg-white/50 flex justify-start items-center p-2 space-x-2">
+      <div class="size-12 bg-white rounded-full relative">
+        <img [src]="data.userImage" alt="profile" class="w-full h-full object-cover rounded-full" />
+      </div>
+      <p [class]="'text-xl font-bold text-[' + color + '] text-stroke-white'">{{data.username}}</p>
+    </a>
+
+    <!-- image -->
+    <div (click)="callback(data)" *ngIf="callback; else noVote"
+      class="w-full h-full bg-white overflow-hidden flex relative cursor-pointer hover:opacity-90">
+      <img [src]="data.imageURL" alt="image_upload" class="w-full h-full object-cover" />
+    </div>
+
+    <ng-template #noVote>
+      <div class="w-full h-full bg-white overflow-hidden flex relative">
+        <img [src]="data.imageURL" alt="image_upload" class="w-full h-full object-cover" />
+      </div>
+    </ng-template>
+
+    <!-- name -->
+    <div *ngIf="!disabledName"
+      [class]="'hidden lg:flex absolute max-w-full overflow-hidden -bottom-24 left-1/2 -translate-x-1/2 mx-auto w-fit px-12 py-4 text-2xl justify-center text-center items-center h-fit bg-[' + color + '] rounded-tl-full rounded-br-full'">
+      <p class="text-ellipsis line-clamp-1 text-left">{{data.name}}</p>
+    </div>
+  </div>
+</div>
