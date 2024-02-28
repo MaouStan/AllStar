@@ -17,7 +17,10 @@ export class AllStarService {
   // upload
   async upload(formData: FormData) {
     let response = await lastValueFrom(
-      this.http.post(`${this.constants.API_ENDPOINT}/upload`, formData)
+      this.http.post(
+        `${this.constants.API_ENDPOINT}/upload?apikey${this.constants.API_KEY}`,
+        formData
+      )
     );
 
     return response as UploadRes;
@@ -42,7 +45,10 @@ export class AllStarService {
     console.log(data);
 
     const response = await lastValueFrom(
-      this.http.post(`${this.constants.API_ENDPOINT}/user`, data)
+      this.http.post(
+        `${this.constants.API_ENDPOINT}/user?apikey${this.constants.API_KEY}`,
+        data
+      )
     );
 
     return response as UserNewRes;
@@ -51,7 +57,9 @@ export class AllStarService {
   // getUserById(id)
   async getUserById(id: number) {
     const response = await lastValueFrom(
-      this.http.get(`${this.constants.API_ENDPOINT}/user/${id}`)
+      this.http.get(
+        `${this.constants.API_ENDPOINT}/user/${id}?apikey${this.constants.API_KEY}`
+      )
     );
 
     return response as UserRes;
@@ -60,7 +68,9 @@ export class AllStarService {
   // getUserByUserName
   async getUserByUsername(username: string) {
     const response = await lastValueFrom(
-      this.http.get(`${this.constants.API_ENDPOINT}/user?username=${username}`)
+      this.http.get(
+        `${this.constants.API_ENDPOINT}/user?username=${username}&apikey${this.constants.API_KEY}`
+      )
     );
 
     return response as UserRes[];
