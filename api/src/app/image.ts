@@ -23,7 +23,7 @@ router.get("/", (_req: Request, res: Response) => {
 router.post("/", (_req: Request, res: Response) => {
   const image: ImageRequest = _req.body;
   conn.query(
-    "CALL InsertImageWithLimit(?, ?, ?, ?, ?)",
+    "CALL allStarInsertImageWithLimit(?, ?, ?, ?, ?)",
     [
       image.userId,
       image.imageURL,
