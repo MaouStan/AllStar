@@ -27,7 +27,7 @@ export const routes: Routes = [
     canActivate: [AuthService],
   },
   { path: 'chart/:id', component: ChartComponent, canActivate: [AuthService] },
-  { path: 'upload', component: UploadComponent },
+  { path: 'upload', component: UploadComponent, canActivate: [AuthService] },
   { path: 'signin', component: SignInComponent, canActivate: [AuthService] },
   { path: 'signup', component: SignUpComponent, canActivate: [AuthService] },
   { path: 'join', component: JoinComponent, canActivate: [AuthService] },

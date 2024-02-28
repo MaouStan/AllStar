@@ -1,5 +1,9 @@
 import { Injectable } from '@angular/core';
-import { CanActivate } from '@angular/router';
+import {
+  ActivatedRouteSnapshot,
+  CanActivate,
+  RouterStateSnapshot,
+} from '@angular/router';
 import { StorageService } from './storage.service';
 
 @Injectable({
@@ -8,18 +12,23 @@ import { StorageService } from './storage.service';
 export class AuthService implements CanActivate {
   constructor(private storageService: StorageService) {}
 
-  async canActivate(): Promise<boolean> {
+  async canActivate(
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot
+  ): Promise<boolean> {
     let isLoggedIn = this.storageService.isLoggedIn();
-    const path = window.location.pathname;
+    const path = state.url; // Use the URL from the RouterStateSnapshot
     // Define routes for redirection
     const pathRequireLogged = ['/join', '/signin', '/signup'];
     const pathNotLoggedToRedirect = [
       '/change',
       '/edit1',
       '/profile',
-      '/graph',
+      '/chart',
       '/search',
     ];
+
+    const pathToCheckFull = ['/change', '/upload', '/edit1'];
 
     if (isLoggedIn && pathRequireLogged.includes(path)) {
       // User is logged in and trying to access a login-required route
@@ -27,7 +36,10 @@ export class AuthService implements CanActivate {
       return false;
     } else if (pathNotLoggedToRedirect.includes(path)) {
       // User is not logged in and trying to access a logged-in required route
-      isLoggedIn = await this.storageService.isLoggedInFull();
+      if (pathToCheckFull.includes(path)) {
+        isLoggedIn = await this.storageService.isLoggedInFull();
+      }
+
       if (!isLoggedIn) {
         window.location.href = '/join';
         return false;
