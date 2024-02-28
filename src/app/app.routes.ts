@@ -13,7 +13,7 @@ import { LogoutComponent } from './pages/logout/logout.component';
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'home', component: VotingComponent },
-  { path: 'edit', component: EditComponent, canActivate: [AuthService] },
+  { path: 'edit1', component: EditComponent, canActivate: [AuthService] },
   {
     path: 'change',
     component: ChangePasswordComponent,
