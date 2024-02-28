@@ -21,7 +21,7 @@ export class AuthService implements CanActivate {
       '/search',
     ];
 
-    if (isLoggedIn && pathLoggedToRedirect.includes(path)) {
+    if (!isLoggedIn && pathLoggedToRedirect.includes(path)) {
       // User is logged in and trying to access a login-required route
       window.location.href = '/';
     } else if (!isLoggedIn && pathNotLoggedToRedirect.includes(path)) {

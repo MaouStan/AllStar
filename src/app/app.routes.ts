@@ -13,20 +13,19 @@ import { RankingComponent } from './pages/ranking/ranking.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
-  { path: 'home', component: VotingComponent,},
-  { path: 'ranking', component: RankingComponent,},
-  
   { path: 'home', component: VotingComponent },
-  { path: 'edit', component: EditComponent, canActivate: [AuthService] },
+  { path: 'ranking', component: RankingComponent },
+
+  { path: 'home', component: VotingComponent },
+  { path: 'edit', component: EditComponent },
   {
     path: 'change',
     component: ChangePasswordComponent,
-    canActivate: [AuthService],
   },
-  { path: 'upload', component: UploadComponent, canActivate: [AuthService] },
-  { path: 'signin', component: SignInComponent, canActivate: [AuthService] },
-  { path: 'signup', component: SignUpComponent, canActivate: [AuthService] },
-  { path: 'join', component: JoinComponent, canActivate: [AuthService] },
+  { path: 'upload', component: UploadComponent },
+  { path: 'signin', component: SignInComponent },
+  { path: 'signup', component: SignUpComponent },
+  { path: 'join', component: JoinComponent },
   { path: 'logout', component: LogoutComponent },
 
   // handle 404

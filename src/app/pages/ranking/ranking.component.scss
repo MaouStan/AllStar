@@ -14,7 +14,7 @@ th {
   border: 1px solid #12182c;
   background-color: #12182c;
   padding: 8px;
-//   text-align: left;
+  //   text-align: left;
 }
 
 /* Style the table data cells */
@@ -25,9 +25,13 @@ td {
   text-align: center;
 }
 
+tr{
+  border-radius: 100%;
+}
+
 img{
-    width: 60px;
-    height: 60px;
+    width: 100px;
+    height: 100px;
     border-radius: 50%;
     display: block; /* Added */
     margin: auto; /* Added */
