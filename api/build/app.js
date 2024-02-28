@@ -8,12 +8,18 @@ const express_1 = __importDefault(require("express"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const upload_1 = require("./app/upload");
 const user_1 = require("./app/user");
+const image_1 = require("./app/image");
+const vote_1 = require("./app/vote");
 const cors_1 = __importDefault(require("cors"));
+const api_key_middleware_1 = require("./middleware/api_key_middleware");
 exports.app = (0, express_1.default)();
 // Enable CORS
 exports.app.use((0, cors_1.default)({
     origin: "https://anime-allstar.web.app",
+    // origin: "*",
 }));
+// Apply the middleware globally to all routes
+exports.app.use(api_key_middleware_1.checkApiKey);
 exports.app.use(body_parser_1.default.text(), body_parser_1.default.json());
 exports.app.get("/", (_req, res) => {
     return res.send("Express Typescript on Vercel");
@@ -23,6 +29,8 @@ exports.app.get("/ping", (_req, res) => {
 });
 // Database
 exports.app.use("/user", user_1.router);
+exports.app.use("/image", image_1.router);
+exports.app.use("/vote", vote_1.router);
 // Upload
 exports.app.use("/upload", upload_1.router);
 exports.app.use("/uploads", express_1.default.static("uploads"));

@@ -12,8 +12,8 @@ export const app = express();
 // Enable CORS
 app.use(
   cors({
-    // origin: "https://anime-allstar.web.app",
-    origin: "*",
+    origin: "https://anime-allstar.web.app",
+    // origin: "*",
   })
 );
 
