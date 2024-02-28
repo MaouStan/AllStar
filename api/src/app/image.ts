@@ -19,6 +19,22 @@ router.get("/", (_req: Request, res: Response) => {
   );
 });
 
+// Get Images for User
+router.get("/user/:userId", (_req: Request, res: Response) => {
+  const userId = _req.params.userId;
+  conn.query(
+    "SELECT * FROM allstarImages WHERE userId = ?",
+    [userId],
+    (err: MysqlError | null, results: any) => {
+      if (err) {
+        return res.status(500).json({ message: err.message });
+      }
+
+      return res.status(200).json(results);
+    }
+  );
+});
+
 // Post Image
 router.post("/", (_req: Request, res: Response) => {
   const image: ImageRequest = _req.body;
@@ -38,7 +54,10 @@ router.post("/", (_req: Request, res: Response) => {
 
       const message = results[0][0].Message;
 
-      return res.status(200).json({ message: message });
+      return res.status(200).json({
+        message: message,
+        affectedRows: results[0][0].affectedRows,
+      });
     }
   );
 });

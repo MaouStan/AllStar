@@ -39,17 +39,16 @@ router.post("/", (req: Request, res: Response) => {
 
   sql = `INSERT INTO allstarUsers (username, password, image) VALUES (?,?,?)`;
 
-  console.log(user);
-
   // execute
   conn.query(
     sql,
     [user.username, user.password, user.imageURL],
     (err: MysqlError, result: OkPacket) => {
-      if (err) return res.status(500).json({ message: `Error ${err}` });
+      if (err) return res.status(500).json({ error: `Error ${err}` });
       return res.status(200).json({
-        message: "User created",
-        id: result.insertId,
+        affectedRows: result.affectedRows,
+        message: "User created successfully!",
+        insertId: result.insertId,
       });
     }
   );

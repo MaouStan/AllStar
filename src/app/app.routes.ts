@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { VotingComponent } from './pages/voting/voting.component';
-import { EditComponent } from './pages/edit/edit.component';
 import { ChangePasswordComponent } from './pages/change-password/change-password.component';
 import { UploadComponent } from './pages/upload/upload.component';
 import { SignInComponent } from './pages/signin/signin.component';
@@ -14,19 +13,16 @@ import { RankingComponent } from './pages/ranking/ranking.component';
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'home', component: VotingComponent },
-  { path: 'edit1', component: EditComponent, canActivate: [AuthService] },
   { path: 'ranking', component: RankingComponent },
-
-  { path: 'home', component: VotingComponent },
-  { path: 'edit', component: EditComponent },
   {
     path: 'change',
     component: ChangePasswordComponent,
+    canActivate: [AuthService],
   },
-  { path: 'upload', component: UploadComponent },
-  { path: 'signin', component: SignInComponent },
-  { path: 'signup', component: SignUpComponent },
-  { path: 'join', component: JoinComponent },
+  { path: 'upload', component: UploadComponent},
+  { path: 'signin', component: SignInComponent, canActivate: [AuthService] },
+  { path: 'signup', component: SignUpComponent, canActivate: [AuthService] },
+  { path: 'join', component: JoinComponent, canActivate: [AuthService] },
   { path: 'logout', component: LogoutComponent },
 
   // handle 404
