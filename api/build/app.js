@@ -10,9 +10,9 @@ const upload_1 = require("./app/upload");
 const user_1 = require("./app/user");
 const cors_1 = __importDefault(require("cors"));
 exports.app = (0, express_1.default)();
-// Cors
+// Enable CORS
 exports.app.use((0, cors_1.default)({
-    origin: "*",
+    origin: "https://anime-allstar.web.app",
 }));
 exports.app.use(body_parser_1.default.text(), body_parser_1.default.json());
 exports.app.get("/", (_req, res) => {

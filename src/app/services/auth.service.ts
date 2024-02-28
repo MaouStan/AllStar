@@ -11,7 +11,7 @@ export class AuthService implements CanActivate {
   async canActivate(): Promise<boolean> {
     const isLoggedIn = await this.storageService.isLoggedInFull();
     const path = window.location.pathname;
-    console.log(isLoggedIn, path);
+    // console.log(isLoggedIn, path);
     // Define routes for redirection
     const pathLoggedToRedirect = ['join', 'signin', 'signup'];
     const pathNotLoggedToRedirect = [
@@ -24,14 +24,11 @@ export class AuthService implements CanActivate {
 
     if (isLoggedIn && pathLoggedToRedirect.includes(path)) {
       // User is logged in and trying to access a login-required route
-      // window.location.href = '/';
-      console.log(1);
+      window.location.href = '/';
     } else if (isLoggedIn == false && pathNotLoggedToRedirect.includes(path)) {
       // User is not logged in and trying to access a logged-in required route
-      // window.location.href = '/join';
-      console.log(2);
+      window.location.href = '/join';
     }
-    console.log(3);
 
     return true;
   }

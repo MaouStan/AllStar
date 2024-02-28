@@ -5,10 +5,11 @@ import { router as user } from "./app/user";
 import cors from "cors";
 
 export const app = express();
-// Cors
+
+// Enable CORS
 app.use(
   cors({
-    origin: "*",
+    origin: "https://anime-allstar.web.app",
   })
 );
 

@@ -42,6 +42,14 @@ export class SignUpComponent {
   handleFileInput($event: Event) {
     // file uploaded image to be displayed
     const file = ($event.target as HTMLInputElement).files![0];
+
+    // Check file size
+    const maxSize = 2 * 1024 * 1024; // 2MB
+    if (file.size > maxSize) {
+      alert('File size exceeds the maximum limit of 2MB');
+      return;
+    }
+
     const reader = new FileReader();
     reader.onload = () => {
       this.image = reader.result;
