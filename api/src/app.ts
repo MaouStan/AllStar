@@ -3,6 +3,7 @@ import bodyParser from "body-parser";
 import { router as upload } from "./app/upload";
 import { router as user } from "./app/user";
 import { router as image } from "./app/image";
+import { router as vote } from "./app/vote";
 import cors from "cors";
 import { checkApiKey } from "./middleware/api_key_middleware";
 
@@ -32,6 +33,7 @@ app.get("/ping", (_req: Request, res: Response) => {
 // Database
 app.use("/user", user);
 app.use("/image", image);
+app.use("/vote", vote);
 
 // Upload
 app.use("/upload", upload);

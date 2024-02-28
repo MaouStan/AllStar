@@ -11,6 +11,7 @@ import { imageUploadRequest } from '../../models/image-upload-req';
 import { PostApiResponse } from '../../models/post-api-res';
 import { ImageResponse } from '../../models/image-res';
 import { ImageCardResponse } from '../../models/image-card-res';
+import { ImageStatResponse } from '../../models/image-stat-res';
 
 @Injectable({
   providedIn: 'root',
@@ -112,5 +113,44 @@ export class AllStarService {
     );
 
     return response as ImageResponse[];
+  }
+
+  async vote(
+    userId: number | null,
+    winner: ImageCardResponse,
+    loser: ImageCardResponse
+  ) {
+    const response = await lastValueFrom(
+      this.http.post(
+        `${this.constants.API_ENDPOINT}/vote?apikey=${this.constants.API_KEY}`,
+        {
+          userId: userId,
+          winnerId: winner.id,
+          loserId: loser.id,
+          winnerScore: winner.score,
+          loserScore: loser.score,
+        }
+      )
+    );
+
+    return response as PostApiResponse;
+  }
+
+  async getImagesStat(userId: number): Promise<ImageStatResponse[]> {
+    let response = await lastValueFrom(
+      this.http.get(
+        `${this.constants.API_ENDPOINT}/image/user/${userId}/stats?apikey=${this.constants.API_KEY}`
+      )
+    );
+
+    response = (response as any[]).map((res: any) => {
+      const scores = res.scores.split(',');
+      return {
+        ...res,
+        scores: scores,
+      };
+    });
+
+    return response as ImageStatResponse[];
   }
 }

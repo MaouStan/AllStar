@@ -38,6 +38,22 @@ router.get("/user/:userId", (_req: Request, res: Response) => {
   );
 });
 
+// Get ImageStat for User
+router.get("/user/:userId/stats", (_req: Request, res: Response) => {
+  const userId = _req.params.userId;
+  conn.query(
+    "CALL allstarGetAllImageScores(?);",
+    [userId],
+    (err: MysqlError | null, results) => {
+      if (err) {
+        return res.status(500).json({ message: err.message });
+      }
+
+      return res.status(200).json(results[0]);
+    }
+  );
+});
+
 // Post Image
 router.post("/", (_req: Request, res: Response) => {
   const image: ImageRequest = _req.body;
