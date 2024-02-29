@@ -21,17 +21,17 @@ exports.app.use((0, cors_1.default)({
 // Apply the middleware globally to all routes
 exports.app.use(api_key_middleware_1.checkApiKey);
 exports.app.use(body_parser_1.default.text(), body_parser_1.default.json());
-exports.app.get("/", (_req, res) => {
+exports.app.get("/api", (_req, res) => {
     return res.send("Express Typescript on Vercel");
 });
-exports.app.get("/ping", (_req, res) => {
+exports.app.get("/api/ping", (_req, res) => {
     return res.send("pong 🏓");
 });
 // Database
-exports.app.use("/user", user_1.router);
-exports.app.use("/image", image_1.router);
-exports.app.use("/vote", vote_1.router);
+exports.app.use("/api/user", user_1.router);
+exports.app.use("/api/image", image_1.router);
+exports.app.use("/api/vote", vote_1.router);
 // Upload
-exports.app.use("/upload", upload_1.router);
-exports.app.use("/uploads", express_1.default.static("uploads"));
+exports.app.use("/api/upload", upload_1.router);
+exports.app.use("/api/uploads", express_1.default.static("uploads"));
 //# sourceMappingURL=app.js.map

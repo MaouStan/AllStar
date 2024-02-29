@@ -22,19 +22,19 @@ app.use(checkApiKey);
 
 app.use(bodyParser.text(), bodyParser.json());
 
-app.get("/", (_req: Request, res: Response) => {
+app.get("/api", (_req: Request, res: Response) => {
   return res.send("Express Typescript on Vercel");
 });
 
-app.get("/ping", (_req: Request, res: Response) => {
+app.get("/api/ping", (_req: Request, res: Response) => {
   return res.send("pong 🏓");
 });
 
 // Database
-app.use("/user", user);
-app.use("/image", image);
-app.use("/vote", vote);
+app.use("/api/user", user);
+app.use("/api/image", image);
+app.use("/api/vote", vote);
 
 // Upload
-app.use("/upload", upload);
-app.use("/uploads", express.static("uploads"));
+app.use("/api/upload", upload);
+app.use("/api/uploads", express.static("uploads"));
