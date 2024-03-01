@@ -10,11 +10,13 @@ import { JoinComponent } from './pages/join/join.component';
 import { AuthService } from './services/auth.service';
 import { LogoutComponent } from './pages/logout/logout.component';
 import { RankingComponent } from './pages/ranking/ranking.component';
+import { AdminComponent } from './pages/admin/admin.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'home', component: VotingComponent },
   { path: 'ranking', component: RankingComponent },
+  { path: 'admin', component: AdminComponent },
 
   { path: 'home', component: VotingComponent },
   { path: 'edit', component: EditComponent },
