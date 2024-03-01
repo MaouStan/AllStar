@@ -17,16 +17,10 @@
         </div>
         <div style="background-color: rgb(18, 24, 44, 0.8);" class="w-full h-full p-10">
             <div class="flex justify-between pb-3">
-                <div>
-                    <mat-form-field class="example-full-width">
-                        <mat-label>Username</mat-label>
-                        <input matInput placeholder="Song Jin Woo">
-                    </mat-form-field>
-                </div>
-                <div class="flex items-center">
+                <div class="w-full flex flex-end items-center" style="display: flex; justify-content: flex-end;">
                     <p class="text-xl pb-5 pr-5"><b>Sort by</b></p>
                     <mat-form-field>
-                        <mat-label style="font-weight: bold; color: black;">ID</mat-label>
+                        <mat-label style="font-weight: bold; color: black;">Date</mat-label>
                         <mat-select>
                             @for (food of foods; track food) {
                             <mat-option [value]="food.value">{{food.viewValue}}</mat-option>

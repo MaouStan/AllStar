@@ -11,12 +11,20 @@ import { AuthService } from './services/auth.service';
 import { LogoutComponent } from './pages/logout/logout.component';
 import { RankingComponent } from './pages/ranking/ranking.component';
 import { AdminComponent } from './pages/admin/admin.component';
+import { AdminRanksComponent } from './pages/admin-ranks/admin-ranks.component';
+import { AdminDashboardComponent } from './pages/admin-dashboard/admin-dashboard.component';
+import { AdminReportComponent } from './pages/admin-report/admin-report.component';
+import { AdminDetailsComponent } from './pages/admin-details/admin-details.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'home', component: VotingComponent },
   { path: 'ranking', component: RankingComponent },
-  { path: 'admin', component: AdminComponent },
+  { path: 'ad-user', component: AdminComponent },
+  { path: 'ad-ranks', component: AdminRanksComponent },
+  { path: 'ad-dash', component: AdminDashboardComponent },
+  { path: 'ad-report', component: AdminReportComponent},
+  { path: 'ad-details', component: AdminDetailsComponent},
 
   { path: 'home', component: VotingComponent },
   { path: 'edit', component: EditComponent },
