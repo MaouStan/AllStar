@@ -4,17 +4,18 @@ import { StorageService } from './services/storage.service';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { AuthService } from './services/auth.service';
 import { filter } from 'rxjs';
+import { CommonModule } from '@angular/common';
 
 @Component({
   standalone: true,
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  imports: [NavbarComponent, RouterModule],
+  imports: [NavbarComponent, RouterModule, CommonModule],
 })
 export class AppComponent {
   title = 'AllStar';
-
+  isAdmin = true;
   constructor(private router: Router, private storageService: StorageService) {}
 
   ngOnInit() {

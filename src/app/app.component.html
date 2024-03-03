@@ -1,4 +1,4 @@
-<main class="relative w-full h-full min-h-screen container mx-auto">
+<main class="relative w-full h-full min-h-screen  mx-auto" [ngClass]="{ 'container': !isAdmin }">
   <app-navbar />
   <router-outlet />
 </main>

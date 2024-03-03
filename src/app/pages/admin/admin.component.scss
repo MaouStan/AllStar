@@ -37,7 +37,7 @@
 }
 
 table {
-  width: 1200px;
+  width: 1500px;
 }
 
 th {
@@ -45,18 +45,22 @@ th {
   background-color: #12182c;
 }
 
-td {
-  height: 65px;
+tr {
   font-weight: bold;
+  text-align: center;
   border: 1px solid #12184d;
   background-color: #12184d;
-  text-align: center;
+  cursor: pointer;
 }
 
 tr {
   border-radius: 100%;
 }
 
-.hov:hover b {
+.hov:hover {
     color: #F64363;
+}
+
+tr:hover {
+  background-color: #202a49;
 }

@@ -3,25 +3,52 @@
         <!-- <p class="w-full text-5xl font-bold text-stoke-blue text-center">
         Change Password
     </p> -->
-        <div class="w-full h-full flex flex-col text-center" style="background-color: #070C22;">
-            <img style="width: 395px; height: 285px; object-fit: cover;"
-                src="https://hips.hearstapps.com/hmg-prod/images/jujutsu-kaisen-season-2-64a6dff90b3e8.png?crop=0.566xw:1.00xh;0,0&resize=1200:*"
-                alt="">
-            <button class="hov pt-5 text-xl"><b>Dashboard</b></button>
-            <button class="hov pt-5 text-xl"><b>Users</b></button>
-            <button class="hov pt-5 text-xl"><b>Ranks</b></button>
-            <button class="hov pt-5 text-xl"><b>Report</b></button>
-            <div style="padding-top: 350px;">
-                <button class="hov text-xl"><b>Logout</b></button>
+    <div class="w-full h-full flex flex-col text-center" style="background-color: #070C22;">
+        <img style="width: 395px; height: 285px; object-fit: cover;"
+            src="https://hips.hearstapps.com/hmg-prod/images/jujutsu-kaisen-season-2-64a6dff90b3e8.png?crop=0.566xw:1.00xh;0,0&resize=1200:*"
+            alt="">
+        <div class="h-full flex flex-col justify-between">
+            <div class="flex text-4xl">
+                <div class="w-full flex flex-col items-start justify-start pl-14 font-bold">
+                    <a routerLink="/ad-dash" class="hov pt-5 text-4xl flex">
+                        <fa-icon class="pr-6" [icon]="faChartColumn" />
+                        Dashboard
+                    </a>
+                    <a routerLink="/ad-user" class="hov pt-5 text-4xl flex ">
+                        <fa-icon class="pr-6" [icon]="faUser" />
+                        Users
+                    </a>
+                    <a routerLink="/ad-ranks" class="hov pt-5 text-4xl flex ">
+                        <fa-icon class="pr-6" [icon]="faMedal" />
+                        Ranks
+                    </a>
+                    <a routerLink="/ad-report" class="text-red-500 pt-5 text-4xl flex ">
+                        <fa-icon class="pr-6" [icon]="faFileContract" />
+                        Report
+                    </a>
+                </div>
+            </div>
+            <div class="pb-10 w-full flex flex-col items-start justify-start pl-14 font-bold">
+                <a routerL="#"  class="hov pt-5 text-4xl flex ">
+                    <fa-icon class="pr-6" [icon]="faRightFromBracket" />
+                    Logout
+                </a>
             </div>
         </div>
+    </div>
         <div style="background-color: rgb(18, 24, 44, 0.8);" class="w-full h-full p-10">
-            <div style="width: 1200px;" class="w-full">
-                <div style="font-weight: bold; font-size: 32px;" class="pb-10">
-                    <h1>Reporter : MaouStan</h1>
-                    <h1>Title : Pae love Hentai Image</h1>
+            <div class="w-full" style="width: 1500px;">
+                <div style="font-weight: bold; font-size: 32px;" class="flex justify-between items-end pb-10">
+                    <div>
+                        <h1>Reporter : MaouStan</h1>
+                        <h1>Title : Pae love Hentai Image</h1>
+                    </div>
+                    <div class="flex pr-20">
+                        <a routerLink="/ad-report" class="text-yellow-200 hover:!text-yellow-400 pr-5"><fa-icon class="pr-1" [icon]="faRightFromBracket" />ignore</a>
+                        <a routerLink="/ad-report" class="hov pr-5"><fa-icon class="pr-1" [icon]="faTrashCan" />Delete</a>
+                    </div>
                 </div>
-                <div class="flex">
+                <div class="flex pl-40">
                     <div class="relative pr-2 w-[21rem] md:w-96 h-[32.5rem] lg:h-[25rem]" style="width: 300px;">
                         <div
                             class='w-full h-full  overflow-hidden bg-white/50 rounded-xl border-[#f64363] border-2 self-center '>

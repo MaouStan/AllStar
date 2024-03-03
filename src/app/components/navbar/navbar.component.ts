@@ -18,10 +18,12 @@ export class NavbarComponent implements OnInit {
   faTimes = faTimes;
   isOpened: boolean = false;
   isLoggedIn: boolean = false;
-
+  isAdmin!:boolean;
   constructor(private storageService: StorageService) {}
 
   ngOnInit(): void {
     this.isLoggedIn = this.storageService.isLoggedIn();
+    this.isAdmin = true//this.storageService.getUser().type == "admin";
+    
   }
 }
