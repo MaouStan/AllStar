@@ -1,5 +1,9 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, CanDeactivate } from '@angular/router';
+import {
+  ActivatedRouteSnapshot,
+  CanActivate,
+  RouterStateSnapshot,
+} from '@angular/router';
 import { StorageService } from './storage.service';
 
 @Injectable({
@@ -8,25 +12,38 @@ import { StorageService } from './storage.service';
 export class AuthService implements CanActivate {
   constructor(private storageService: StorageService) {}
 
-  async canActivate(): Promise<boolean> {
-    const isLoggedIn = await this.storageService.isLoggedInFull();
-    const path = window.location.pathname;
+  async canActivate(
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot
+  ): Promise<boolean> {
+    let isLoggedIn = this.storageService.isLoggedIn();
+    const path = state.url; // Use the URL from the RouterStateSnapshot
     // Define routes for redirection
-    const pathLoggedToRedirect = ['/join', '/signin', '/signup', '/edit'];
+    const pathRequireLogged = ['/join', '/signin', '/signup'];
     const pathNotLoggedToRedirect = [
-      '/change-password',
-      '/edit',
+      '/change',
+      '/edit1',
       '/profile',
-      '/graph',
+      '/chart',
       '/search',
     ];
 
-    if (!isLoggedIn && pathLoggedToRedirect.includes(path)) {
+    const pathToCheckFull = ['/change', '/upload', '/edit1'];
+
+    if (isLoggedIn && pathRequireLogged.includes(path)) {
       // User is logged in and trying to access a login-required route
       window.location.href = '/';
-    } else if (!isLoggedIn && pathNotLoggedToRedirect.includes(path)) {
+      return false;
+    } else if (pathNotLoggedToRedirect.includes(path)) {
       // User is not logged in and trying to access a logged-in required route
-      window.location.href = '/join';
+      if (pathToCheckFull.includes(path)) {
+        isLoggedIn = await this.storageService.isLoggedInFull();
+      }
+
+      if (!isLoggedIn) {
+        window.location.href = '/join';
+        return false;
+      }
     }
 
     return true;

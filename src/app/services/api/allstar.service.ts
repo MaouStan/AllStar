@@ -7,6 +7,11 @@ import { UserNewReq } from '../../models/user-new-req';
 import { UserNewRes } from '../../models/user-new-res';
 import { UserRes } from '../../models/user-res';
 import * as bcrypt from 'bcryptjs';
+import { imageUploadRequest } from '../../models/image-upload-req';
+import { PostApiResponse } from '../../models/post-api-res';
+import { ImageResponse } from '../../models/image-res';
+import { ImageCardResponse } from '../../models/image-card-res';
+import { ImageStatResponse } from '../../models/image-stat-res';
 
 @Injectable({
   providedIn: 'root',
@@ -17,7 +22,10 @@ export class AllStarService {
   // upload
   async upload(formData: FormData) {
     let response = await lastValueFrom(
-      this.http.post(`${this.constants.API_ENDPOINT}/upload`, formData)
+      this.http.post(
+        `${this.constants.API_ENDPOINT}/upload?apikey=${this.constants.API_KEY}`,
+        formData
+      )
     );
 
     return response as UploadRes;
@@ -42,16 +50,21 @@ export class AllStarService {
     console.log(data);
 
     const response = await lastValueFrom(
-      this.http.post(`${this.constants.API_ENDPOINT}/user`, data)
+      this.http.post(
+        `${this.constants.API_ENDPOINT}/user?apikey=${this.constants.API_KEY}`,
+        data
+      )
     );
 
-    return response as UserNewRes;
+    return response as PostApiResponse;
   }
 
   // getUserById(id)
   async getUserById(id: number) {
     const response = await lastValueFrom(
-      this.http.get(`${this.constants.API_ENDPOINT}/user/${id}`)
+      this.http.get(
+        `${this.constants.API_ENDPOINT}/user/${id}?apikey=${this.constants.API_KEY}`
+      )
     );
 
     return response as UserRes;
@@ -60,9 +73,84 @@ export class AllStarService {
   // getUserByUserName
   async getUserByUsername(username: string) {
     const response = await lastValueFrom(
-      this.http.get(`${this.constants.API_ENDPOINT}/user?username=${username}`)
+      this.http.get(
+        `${this.constants.API_ENDPOINT}/user?username=${username}&apikey=${this.constants.API_KEY}`
+      )
     );
 
     return response as UserRes[];
+  }
+
+  // createPost
+  async createPost(imageUploadRequest: imageUploadRequest) {
+    const response = await lastValueFrom(
+      this.http.post(
+        `${this.constants.API_ENDPOINT}/image?apikey=${this.constants.API_KEY}`,
+        imageUploadRequest
+      )
+    );
+
+    return response as PostApiResponse;
+  }
+
+  // getImages
+  async getImageRandom(): Promise<ImageCardResponse[]> {
+    const response = await lastValueFrom(
+      this.http.get(
+        `${this.constants.API_ENDPOINT}/image/random?apikey=${this.constants.API_KEY}`
+      )
+    );
+
+    return response as ImageCardResponse[];
+  }
+
+  // getImagesFromUser
+  async getImagesFromUser(userId: number) {
+    const response = await lastValueFrom(
+      this.http.get(
+        `${this.constants.API_ENDPOINT}/image/user/${userId}?apikey=${this.constants.API_KEY}`
+      )
+    );
+
+    return response as ImageResponse[];
+  }
+
+  async vote(
+    userId: number | null,
+    winner: ImageCardResponse,
+    loser: ImageCardResponse
+  ) {
+    const response = await lastValueFrom(
+      this.http.post(
+        `${this.constants.API_ENDPOINT}/vote?apikey=${this.constants.API_KEY}`,
+        {
+          userId: userId,
+          winnerId: winner.id,
+          loserId: loser.id,
+          winnerScore: winner.score,
+          loserScore: loser.score,
+        }
+      )
+    );
+
+    return response as PostApiResponse;
+  }
+
+  async getImagesStat(userId: number): Promise<ImageStatResponse[]> {
+    let response = await lastValueFrom(
+      this.http.get(
+        `${this.constants.API_ENDPOINT}/image/user/${userId}/stats?apikey=${this.constants.API_KEY}`
+      )
+    );
+
+    response = (response as any[]).map((res: any) => {
+      const scores = res.scores.split(',');
+      return {
+        ...res,
+        scores: scores,
+      };
+    });
+
+    return response as ImageStatResponse[];
   }
 }

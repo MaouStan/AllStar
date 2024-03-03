@@ -1,4 +1,4 @@
-import mysql from "mysql";
+import mysql, { MysqlError } from "mysql";
 import util from "util";
 
 export const conn = mysql.createPool({
@@ -10,3 +10,18 @@ export const conn = mysql.createPool({
 });
 
 export const queryAsync = util.promisify(conn.query).bind(conn);
+
+export async function executeQuery(
+  query: string,
+  params: any[]
+): Promise<void> {
+  return new Promise<void>((resolve, reject) => {
+    conn.query(query, params, (err: any) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve();
+      }
+    });
+  });
+}

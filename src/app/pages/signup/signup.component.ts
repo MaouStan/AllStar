@@ -13,6 +13,7 @@ import { UserNewReq } from '../../models/user-new-req';
 import { UserNewRes } from '../../models/user-new-res';
 import { AllStarService } from '../../services/api/allstar.service';
 import { UserRes } from '../../models/user-res';
+import { PostApiResponse } from '../../models/post-api-res';
 @Component({
   selector: 'app-signup',
   standalone: true,
@@ -42,6 +43,14 @@ export class SignUpComponent {
   handleFileInput($event: Event) {
     // file uploaded image to be displayed
     const file = ($event.target as HTMLInputElement).files![0];
+
+    // Check file size
+    const maxSize = 2 * 1024 * 1024; // 2MB
+    if (file.size > maxSize) {
+      alert('File size exceeds the maximum limit of 2MB');
+      return;
+    }
+
     const reader = new FileReader();
     reader.onload = () => {
       this.image = reader.result;
@@ -95,12 +104,12 @@ export class SignUpComponent {
     };
 
     // call services
-    const createUserResponse: UserNewRes = await this.allStarService.createUser(
-      data
-    );
+    const createUserResponse: PostApiResponse =
+      await this.allStarService.createUser(data);
 
     // if createUserResponse.id is not undefined
-    if (createUserResponse.id) {
+    console.log(createUserResponse);
+    if (createUserResponse.affectedRows === 1) {
       // goto /signin
       window.location.href = '/signin';
     } else {
