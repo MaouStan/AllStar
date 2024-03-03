@@ -1,8 +1,8 @@
-import { Component, Input } from '@angular/core';
-import { ImageResponse } from '../../models/image-res';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { ImageCardResponse } from '../../models/image-card-res';
+import { CardData } from '../../models/card-data';
+import { trigger, state, style, animate, transition } from '@angular/animations';
 
 @Component({
   selector: 'app-card',
@@ -10,10 +10,56 @@ import { ImageCardResponse } from '../../models/image-card-res';
   imports: [RouterModule, CommonModule],
   templateUrl: './card.component.html',
   styleUrl: './card.component.scss',
+  animations: [
+    trigger('damageAnimation', [
+      state('show', style({ transform: 'translateY(-100%)', opacity: 1 })),
+      state('void', style({ transform: 'translateY(0)', opacity: 0 })),
+      transition('void => show', [
+        style({ transform: 'translateY(0)', opacity: 0 }),
+        animate('0.5s ease-in-out')
+      ]),
+      transition('show => void', [
+        animate('0.5s ease-in-out', style({ transform: 'translateY(-100%)', opacity: 0 }))
+      ])
+    ])
+  ]
 })
-export class CardComponent {
-  @Input() data!: ImageCardResponse;
+export class CardComponent implements OnInit {
+  @Input() data!: CardData;
   @Input() color!: string;
-  @Input() disabledName: boolean = false;
-  @Input() callback?: (data: ImageCardResponse) => void;
+  @Input() disabledName = false;
+  @Input() callback?: (data: CardData) => void;
+
+  damageText: string = '';
+  damageState: string = 'void';
+
+  ngOnInit(): void {
+    if (!this.data) {
+      // Fake
+      this.data = {
+        'id': 1,
+        'userId': 1,
+        'userImage': '1',
+        'imageURL': 'string',
+        'name': 'string',
+        'username': 'string',
+      }
+
+    }
+
+  }
+
+
+
+  showDamage(damage: number) {
+    const damageCasted = damage.toFixed(4);
+    this.damageText = '' + (damage > 0 ? "+" + damageCasted : damageCasted);
+    this.damageState = 'show';
+
+    // Reset damage text after a delay
+    setTimeout(() => {
+      this.damageState = 'void';
+    }, 2100); // Adjust the duration the damage text is visible (in milliseconds)
+  }
+
 }

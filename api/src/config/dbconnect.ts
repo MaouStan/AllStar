@@ -1,27 +1,71 @@
-import mysql, { MysqlError } from "mysql";
-import util from "util";
+import mysql from 'mysql2';
+import dotenv from 'dotenv';
 
-export const conn = mysql.createPool({
-  connectionLimit: 10,
-  host: "202.28.34.197",
-  user: "web66_65011212122",
-  password: "65011212122@csmsu",
-  database: "web66_65011212122",
+// App Variables
+dotenv.config();
+
+// DB CONFIG
+const dbConfig = {
+  HOST: process.env.DB_HOST,
+  USER: process.env.DB_USER,
+  PASSWORD: process.env.DB_PASSWORD,
+  DB: process.env.DB_NAME,
+  dialect: 'mysql',
+  pool: {
+    max: 20,
+    min: 0,
+    acquire: 30000,
+    idle: 10000,
+  },
+};
+// MySQL
+// Connect To The Database
+export const conn = mysql.createConnection({
+  host: dbConfig.HOST,
+  user: dbConfig.USER,
+  password: dbConfig.PASSWORD,
+  database: dbConfig.DB,
 });
 
-export const queryAsync = util.promisify(conn.query).bind(conn);
-
-export async function executeQuery(
-  query: string,
-  params: any[]
-): Promise<void> {
-  return new Promise<void>((resolve, reject) => {
-    conn.query(query, params, (err: any) => {
+// Query Async
+export const queryAsync = (sql: string, values?: any) => {
+  return new Promise((resolve, reject) => {
+    conn.query(sql, values, (err, results) => {
       if (err) {
         reject(err);
       } else {
-        resolve();
+        resolve(results);
       }
     });
   });
+};
+
+// TABLE INTERFACES
+export interface USER_TABLE {
+  userId: number;
+  username: string;
+  password: string;
+  image: string;
+  note: string | null;
+  type: 'admin' | 'user';
+  joinDate: Date;
+}
+
+export interface IMAGE_TABLE {
+  id: number;
+  userId: number;
+  imageURL: string;
+  score: number;
+  name: string;
+  series_name: string;
+  description: string | null;
+  last_update: Date;
+}
+
+export interface VOTE_TABLE {
+  vid: number;
+  userId: number;
+  imageId: number;
+  score: number;
+  timestamp: string;
 }

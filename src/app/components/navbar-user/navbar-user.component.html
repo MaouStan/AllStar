@@ -12,17 +12,25 @@
       (click)="isOpened = false">Home</a>
     <a routerLink="/ranking" [routerLinkActive]="'border-b-2 border-[#F64363]'" class="hover:text-[#f64363]"
       (click)="isOpened = false">Ranks</a>
-    <a routerLink="/upload" [routerLinkActive]="'border-b-2 border-[#F64363]'" class="hover:text-[#f64363]"
-      (click)="isOpened = false">upload</a>
-    <a routerLink="/change" [routerLinkActive]="'border-b-2 border-[#F64363]'" class="hover:text-[#f64363]"
-      (click)="isOpened = false">change</a>
-    <a [routerLink]="'/chart/'+user.userId" [routerLinkActive]="'border-b-2 border-[#F64363]'"
-      class="hover:text-[#f64363]" (click)="isOpened = false">chart</a>
-    <a routerLink="/logout"
+    <a [routerLink]="'/chart/'+user?.userId" [routerLinkActive]="'border-b-2 border-[#F64363]'"
+      class="hover:text-[#f64363]" (click)="isOpened = false">Graph</a>
+    <!-- user icon circle -->
+    <div class="dropdown">
+      <div (click)="router.navigate(['/profile', user?.userId])"
+        class="w-12 h-12 bg-[#F64363] cursor-pointer border-2 rounded-full overflow-hidden flex justify-center items-center hover:bg-[#f64363] hover:text-white">
+        <img class="w-full h-full object-cover" [src]="user?.image" alt="">
+      </div>
+      <div class="dropdown-content bg-slate-500 flex flex-col items-center justify-center">
+        <a class="dropdown-item" routerLink="/change">Change Password</a>
+        <a class="dropdown-item" routerLink="/upload">Upload</a>
+        <a class="dropdown-item" routerLink="/auth/logout">Logout</a>
+      </div>
+    </div>
+    <!-- <a routerLink="/auth/logout"
       class="text-[#F64363] border-[#F64363] text-base border-2 px-3 py-0.5 rounded-tl-[1.5rem] rounded-br-[1.5rem] hover:bg-[#f64363] hover:text-white"
       [routerLinkActive]="'border-b-2 border-[#F64363]'" (click)="isOpened = false">
       Logout
-    </a>
+    </a> -->
   </div>
 
   <!-- Hamburger -->
@@ -40,13 +48,7 @@
         (click)="isOpened = false">Home</a>
       <a routerLink="/ranking" [routerLinkActive]="'border-b-2 border-[#F64363]'" class="w-full hover:text-[#f64363]"
         (click)="isOpened = false">Ranks</a>
-      <a routerLink="/upload" [routerLinkActive]="'border-b-2 border-[#F64363]'" class="w-full hover:text-[#f64363]"
-        (click)="isOpened = false">upload</a>
-      <a routerLink="/change" [routerLinkActive]="'border-b-2 border-[#F64363]'" class="w-full hover:text-[#f64363]"
-        (click)="isOpened = false">change</a>
-      <a [routerLink]="'/chart/'+user.userId" [routerLinkActive]="'border-b-2 border-[#F64363]'"
-        class="w-full hover:text-[#f64363]" (click)="isOpened = false">chart</a>
-      <a routerLink="/logout"
+      <a routerLink="/auth/logout"
         class="w-full text-[#F64363] border-[#F64363] border-2 px-3 py-3 rounded-tl-[1.5rem] rounded-br-[1.5rem] hover:bg-[#f64363] hover:text-white"
         [routerLinkActive]="'border-b-2 border-[#F64363]'" (click)="isOpened = false">Logout</a>
 

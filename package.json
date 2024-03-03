@@ -6,7 +6,8 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "production": "ng build & firebase deploy"
   },
   "private": true,
   "dependencies": {
@@ -15,6 +16,7 @@
     "@angular/common": "^17.1.0",
     "@angular/compiler": "^17.1.0",
     "@angular/core": "^17.1.0",
+    "@angular/flex-layout": "^15.0.0-beta.42",
     "@angular/forms": "^17.1.0",
     "@angular/material": "^17.2.1",
     "@angular/platform-browser": "^17.1.0",
@@ -25,12 +27,17 @@
     "@fortawesome/free-solid-svg-icons": "^6.4.2",
     "@studimax/elo": "^1.0.1",
     "@types/bcryptjs": "^2.4.6",
+    "@types/device-uuid": "^1.0.3",
     "bcryptjs": "^2.4.3",
     "chart.js": "^4.4.1",
     "chartjs-plugin-datalabels": "^2.2.0",
+    "device-uuid": "^1.0.4",
+    "jwt-decode": "^4.0.0",
     "ng2-charts": "^5.0.4",
+    "react-toastify": "^10.0.4",
     "rxjs": "~7.8.0",
     "sweetalert2": "^11.10.5",
+    "toastify-js": "^1.12.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.3"
   },
@@ -40,6 +47,7 @@
     "@angular/compiler-cli": "^17.1.0",
     "@types/jasmine": "~5.1.0",
     "@types/node": "^20.11.20",
+    "@types/toastify-js": "^1.12.3",
     "jasmine-core": "~5.1.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",

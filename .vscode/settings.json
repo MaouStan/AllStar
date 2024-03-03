@@ -2,9 +2,14 @@
   "cSpell.words": [
     "allstar",
     "apikey",
+    "Authen",
     "dbconnect",
     "editprofile",
+    "expressjwt",
+    "localstorag",
     "Maou",
-    "signin"
-  ]
+    "signin",
+    "testtoken"
+  ],
+  "git.ignoreLimitWarning": true
 }

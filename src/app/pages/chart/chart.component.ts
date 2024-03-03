@@ -2,15 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { NgChartsModule } from 'ng2-charts';
 
 import { ChartConfiguration, ChartOptions, Plugin } from 'chart.js';
-import { ImageResponse } from '../../models/image-res';
-import { ImageStatResponse } from '../../models/image-stat-res';
-import { AllStarService } from '../../services/api/allstar.service';
-import { StorageService } from '../../services/storage.service';
-import { UserRes } from '../../models/user-res';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { ImageService } from '../../services/api/image.service';
+import { ImageStatResponse } from '../../models/api/image-stats';
 
 @Component({
   selector: 'app-chart',
@@ -22,13 +19,14 @@ import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 export class ChartComponent implements OnInit {
   dates: string[] = [];
   Images: ImageStatResponse[] = [];
+  loaded: boolean = false;
 
   faSpinner = faSpinner;
 
   constructor(
-    private allStarService: AllStarService,
-    private activateRoute: ActivatedRoute
-  ) {}
+    private activateRoute: ActivatedRoute,
+    private imageService: ImageService
+  ) { }
 
   async ngOnInit(): Promise<void> {
     // get the last 7 days
@@ -40,26 +38,29 @@ export class ChartComponent implements OnInit {
     this.dates.push(new Date().toDateString());
 
     // get userId from url
-    const userId = this.activateRoute.snapshot.params['id'] || null;
+    const userId = this.activateRoute.snapshot.params['userId'] || null;
 
     if (!userId) {
       window.location.href = '/';
     }
 
     // get the images
-    this.Images = await this.allStarService.getImagesStat(userId);
+    this.Images = await this.imageService.getImagesStats(userId);
+    this.loaded = true;
 
-    //  y min start rouned 1490 -> 1400 mininum in list
-    let min = Math.min(
-      ...this.Images.map((image: ImageStatResponse) =>
-        Math.min(...image.scores)
-      )
-    );
-    let max = Math.max(
-      ...this.Images.map((image: ImageStatResponse) =>
-        Math.max(...image.scores)
-      )
-    );
+    let min: number = Number.MAX_VALUE;
+    let max: number = Number.MIN_VALUE;
+
+    //  y min start rounded 1490 -> 1400 minimum in list
+    this.Images.forEach((image: ImageStatResponse) => {
+      const scores = image.scores.filter((score: any) => !Number.isNaN(score));
+      if (scores.length > 0) {
+        const localMin = Math.min(...scores);
+        const localMax = Math.max(...scores);
+        min = Math.min(min, localMin);
+        max = Math.max(max, localMax);
+      }
+    });
 
     this.scatterChartOptions = {
       responsive: true,
@@ -152,9 +153,9 @@ export class ChartComponent implements OnInit {
       },
     };
     this.scatterChartData = {
-      datasets: this.Images.map((image: ImageStatResponse) => {
+      datasets: this.Images.map((image: any) => {
         return {
-          data: image.scores.map((score, index) => {
+          data: image.scores.map((score: any, index: any) => {
             return { x: index + 1, y: score };
           }),
           label: `${image.name} (${image.series_name})`,
@@ -270,10 +271,14 @@ export class ChartComponent implements OnInit {
         const currentIndex = tooltip.dataPoints[i].raw.x;
         const currentDatasetIndex = tooltip.dataPoints[i].datasetIndex;
         const currentScore = parseInt(value.replace(',', ''));
-        const previousScore =
+        let previousScore =
           currentIndex > 0
             ? +this.Images[currentDatasetIndex].scores[currentIndex - 2]
             : currentScore;
+        // if prev value is NaN 
+        if (isNaN(previousScore)) {
+          previousScore = currentScore;
+        }
         const isIncrease = currentScore > previousScore;
         const text3 = document.createElement('span');
         text3.style.position = 'relative';

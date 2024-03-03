@@ -1,52 +1,49 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { VotingComponent } from './pages/voting/voting.component';
+import { VoteComponent } from './pages/vote/vote.component';
+import { JoinComponent } from './pages/auth/join/join.component';
+import { SigninComponent } from './pages/auth/signin/signin.component';
+import { SignupComponent } from './pages/auth/signup/signup.component';
+import { LogoutComponent } from './pages/auth/logout/logout.component';
+import { ChartComponent } from './pages/chart/chart.component';
 import { ChangePasswordComponent } from './pages/change-password/change-password.component';
 import { UploadComponent } from './pages/upload/upload.component';
-import { SignInComponent } from './pages/signin/signin.component';
-import { SignUpComponent } from './pages/signup/signup.component';
-import { JoinComponent } from './pages/join/join.component';
-import { AuthService } from './services/auth.service';
-import { LogoutComponent } from './pages/logout/logout.component';
 import { RankingComponent } from './pages/ranking/ranking.component';
+import { AuthGuard } from './auth.guard';
+import { DashboardComponent } from './pages/admin/dashboard/dashboard.component';
 import { AdminComponent } from './pages/admin/admin.component';
-import { AdminRanksComponent } from './pages/admin-ranks/admin-ranks.component';
-import { AdminDashboardComponent } from './pages/admin-dashboard/admin-dashboard.component';
-import { AdminReportComponent } from './pages/admin-report/admin-report.component';
-import { AdminDetailsComponent } from './pages/admin-details/admin-details.component';
-import { ProfileComponent } from './pages/profile/profile.component';
-import { ChartComponent } from './pages/chart/chart.component';
+import { UserComponent } from './pages/admin/user/user.component';
+import { RanksComponent } from './pages/admin/ranks/ranks.component';
+import { ReportComponent } from './pages/admin/report/report.component';
+import { DetailComponent } from './pages/admin/detail/detail.component';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'home', pathMatch: 'full' },
-  { path: 'home', component: VotingComponent },
+
+  { path: 'home', component: VoteComponent },
+  { path: 'auth/join', component: JoinComponent },
+  { path: 'auth/signin', component: SigninComponent },
+  { path: 'auth/signup', component: SignupComponent },
+  { path: 'auth/logout', component: LogoutComponent },
+  { path: 'chart/:userId', component: ChartComponent, canActivate: [AuthGuard] },
+  { path: 'change', component: ChangePasswordComponent, canActivate: [AuthGuard] },
   { path: 'ranking', component: RankingComponent },
-  { path: 'ad-user', component: AdminComponent },
-  { path: 'ad-ranks', component: AdminRanksComponent },
-  { path: 'ad-dash', component: AdminDashboardComponent },
-  { path: 'ad-report', component: AdminReportComponent},
-  { path: 'ad-details', component: AdminDetailsComponent},
+  { path: 'upload', component: UploadComponent, canActivate: [AuthGuard] },
 
-  { path: 'home', component: VotingComponent },
   {
-    path: 'change',
-    component: ChangePasswordComponent,
-    canActivate: [AuthService],
+    path: 'admin',
+    component: AdminComponent,
+    canActivate: [AuthGuard],
+    children: [
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      { path: 'dashboard', component: DashboardComponent },
+      { path: 'user', component: UserComponent },
+      { path: 'ranks', component: RanksComponent },
+      { path: 'report', component: ReportComponent },
+      { path: 'detail', component: DetailComponent },
+    ]
   },
-  {
-    path: 'profile/:id',
-    component: ProfileComponent,
-    canActivate: [AuthService],
-  },
-  { path: 'chart/:id', component: ChartComponent, canActivate: [AuthService] },
-  { path: 'upload', component: UploadComponent, canActivate: [AuthService] },
-  { path: 'signin', component: SignInComponent, canActivate: [AuthService] },
-  { path: 'signup', component: SignUpComponent, canActivate: [AuthService] },
-  { path: 'join', component: JoinComponent, canActivate: [AuthService] },
-  { path: 'logout', component: LogoutComponent },
 
-  // handle 404
-  { path: '**', redirectTo: 'home' },
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
 ];
 
 // Create the AppRoutingModule
@@ -54,4 +51,4 @@ export const routes: Routes = [
   imports: [RouterModule.forRoot(routes)], // Import the RouterModule and configure the routes
   exports: [RouterModule], // Export the RouterModule to make it available for other modules
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }

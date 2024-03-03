@@ -7,11 +7,11 @@ import {
   faArrowDown,
   faCloudArrowDown,
 } from '@fortawesome/free-solid-svg-icons';
-import { AllStarService } from '../../services/api/allstar.service';
-import { imageUploadRequest } from '../../models/image-upload-req';
-import { StorageService } from '../../services/storage.service';
-import { UserRes } from '../../models/user-res';
-import { ImageResponse } from '../../models/image-res';
+import { UserData } from '../../models/auth/userData';
+import { AuthService } from '../../services/auth.service';
+import { ImageService } from '../../services/api/image.service';
+import { ImageUploadRequest } from '../../models/api/image-upload-req';
+import Toastify from 'toastify-js'
 
 @Component({
   selector: 'app-upload',
@@ -21,25 +21,16 @@ import { ImageResponse } from '../../models/image-res';
   styleUrl: './upload.component.scss',
 })
 export class UploadComponent implements OnInit {
-  user: UserRes = this.storageService.getUser();
+  user: UserData | null = this.authService.getCurrentUserData();
 
   constructor(
-    private allStarService: AllStarService,
-    private storageService: StorageService
-  ) {}
+    private authService: AuthService,
+    private imageService: ImageService
+  ) { }
+
   ngOnInit(): void {
-    this.setUp();
-  }
-
-  async setUp() {
-    const images: ImageResponse[] = await this.allStarService.getImagesFromUser(
-      this.user.userId
-    );
-
-    // if len > 5 redirect home
-    if (images.length >= 5) {
-      alert('You have reached the maximum limit of 5 posts');
-      window.location.href = '/';
+    if (!this.authService.loggedIn()) {
+      this.authService.logout();
     }
   }
 
@@ -47,33 +38,84 @@ export class UploadComponent implements OnInit {
   faCloudArrowDown = faCloudArrowDown;
   image: string | ArrayBuffer | null = null;
   imageFile: File | null = null;
+  uploading: boolean = false;
   async upload($event: SubmitEvent) {
     // handle form submission
     $event.preventDefault();
 
+    if (this.uploading) return;
+    this.uploading = true;
+
+    // toast upload
+    Toastify({
+      text: "Uploading...",
+      backgroundColor: "linear-gradient(to right, #00d09b, #96c93d)",
+      duration: 3000,
+      close: true,
+      gravity: "top",
+      position: "right",
+      stopOnFocus: true,
+    }).showToast();
+
+
+    // if user is not logged in
+    if (!this.user) {
+      // toast
+      Toastify({
+        text: "User not logged in",
+        backgroundColor: "linear-gradient(to right, #ff5f6d, #ffc371)",
+        duration: 3000,
+        close: true,
+        gravity: "top",
+        position: "right",
+        stopOnFocus: true,
+      }).showToast();
+      this.uploading = false;
+      return;
+    }
+
     // if image is not uploaded
     if (!this.imageFile) {
-      alert('Please upload an image');
+      // toast
+      Toastify({
+        text: "Image not uploaded",
+        backgroundColor: "linear-gradient(to right, #ff5f6d, #ffc371)",
+        duration: 3000,
+        close: true,
+        gravity: "top",
+        position: "right",
+        stopOnFocus: true,
+      }).showToast();
+      this.uploading = false;
+
       return;
     }
 
     const form = $event.target as HTMLFormElement;
-    form['disabled'] = true;
 
     // call allStarService.upload imageFile
-    const formData = new FormData();
-    formData.append('file', this.imageFile);
-    const uploadResponse = await this.allStarService.upload(formData);
+    const uploadResponse = await this.imageService.uploadImage(this.imageFile);
 
-    let imageURL = uploadResponse.filename;
+    let imageURL = uploadResponse.data.url;
     if (!imageURL) {
-      alert('Image upload failed');
+      // alert('Image upload failed');
+      // toast
+      Toastify({
+        text: "Image upload failed",
+        backgroundColor: "linear-gradient(to right, #ff5f6d, #ffc371)",
+        duration: 3000,
+        close: true,
+        gravity: "top",
+        position: "right",
+        stopOnFocus: true,
+      }).showToast();
+      this.uploading = false;
+
       return;
     }
 
-    const user: UserRes = this.storageService.getUser();
-    const imageUploadData: imageUploadRequest = {
-      userId: user.userId,
+    const imageUploadData: ImageUploadRequest = {
+      userId: +this.user.userId,
       imageURL: imageURL,
       name: form['imageName'].value.trim(),
       series_name: form['seriesName'].value.trim(),
@@ -84,15 +126,46 @@ export class UploadComponent implements OnInit {
     };
 
     // call allStarService.createPost jsonData
-    const response = await this.allStarService.createPost(imageUploadData);
-    if (response.affectedRows !== 0) {
-      alert('Post successfully');
+    const response = await this.imageService.create(imageUploadData);
+    if (response?.status === 'ok') {
+      // toast
+      Toastify({
+        text: "Image uploaded successfully",
+        backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",
+        duration: 3000,
+        close: true,
+        gravity: "top",
+        position: "right",
+        stopOnFocus: true,
+      }).showToast();
+
+      // reset form
       form.reset();
       this.image = null;
       this.imageFile = null;
-    } else {
-      alert('Post failed');
     }
+    else {
+      // toast
+      Toastify({
+        text: "Image upload failed",
+        backgroundColor: "linear-gradient(to right, #ff5f6d, #ffc371)",
+        duration: 3000,
+        close: true,
+        gravity: "top",
+        position: "right",
+        stopOnFocus: true,
+      }).showToast();
+      Toastify({
+        text: response?.message,
+        backgroundColor: "linear-gradient(to right, #ff5f6d, #ffc371)",
+        duration: 3000,
+        close: true,
+        gravity: "top",
+        position: "right",
+        stopOnFocus: true,
+      }).showToast();
+    }
+    this.uploading = false;
   }
   handleFileInput($event: Event) {
     // file uploaded image to be displayed
@@ -101,7 +174,20 @@ export class UploadComponent implements OnInit {
     // Check file size
     const maxSize = 2 * 1024 * 1024; // 2MB
     if (file.size > maxSize) {
-      alert('File size exceeds the maximum limit of 2MB');
+      // alert('File size exceeds the maximum limit of 2MB');
+      // toast alert
+      Toastify({
+        text: "File size exceeds the maximum limit of 2MB",
+        backgroundColor: "linear-gradient(to right, #ff5f6d, #ffc371)",
+        duration: 3000,
+        close: true,
+        gravity: "top",
+        position: "right",
+        stopOnFocus: true,
+      }).showToast();
+      this.imageFile = null;
+      // reset input
+      ($event.target as HTMLInputElement).value = '';
       return;
     }
 

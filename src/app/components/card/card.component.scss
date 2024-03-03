@@ -1,0 +1,16 @@
+.neon-text {
+  color: #e22bd6; /* White color for text */
+  text-shadow: 0 0 5px #e22bd655, /* White drop shadow */ 0 0 -0px #e22bd655,
+    0 0 10px #e22bd655, 0 0 20px #e22bd655, 0 0 30px #f643f6, 0 0 45px #f643f6,
+    0 0 65px #f643f6, 0 0 90px #f643f6; /* Adjust the shadow spread radius as needed */
+  animation: flicker 1s alternate;
+}
+
+@keyframes flicker {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0.8;
+  }
+}

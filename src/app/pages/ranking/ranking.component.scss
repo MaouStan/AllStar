@@ -3,17 +3,10 @@
     1.1px 1.1px 0 #f64363;
 }
 
-/* Style the table */
-table {
-  width: 1200px;
-  //   border-collapse: collapse;
-}
-
 /* Style the table header cells */
 th {
   border: 1px solid #12182c;
   background-color: #12182c;
-  padding: 8px;
   //   text-align: left;
 }
 
@@ -21,7 +14,6 @@ th {
 td {
   // border: 1px solid #12184d;
   // background-color: #12184d;
-  padding: 8px;
   text-align: center;
 }
 
@@ -33,15 +25,7 @@ tr:nth-child(even) {
   background-color: #252e7e; /* หรือสีอื่นๆ ที่ต้องการให้สลับกัน */
 }
 
-
-tr{
-  border-radius: 100%;
-}
-
-.img{
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    display: block; /* Added */
-    margin: auto; /* Added */
+table * {
+  // remove border
+  border: none;
 }

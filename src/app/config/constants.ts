@@ -5,6 +5,5 @@ Injectable({
 });
 export class Constants {
   public readonly API_ENDPOINT: string = 'https://141.98.18.137/api';
-  // public readonly API_ENDPOINT: string = 'http://localhost:3000';
-  public readonly API_KEY: string = 'MaouStan';
+  // public readonly API_ENDPOINT: string = 'http://localhost:3500/api';
 }
