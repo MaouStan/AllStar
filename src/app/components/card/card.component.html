@@ -5,7 +5,7 @@
       [style.border-color]="color" [style.background-color]="color">
       <a [routerLink]="'/profile/' + data.userId"
         class="w-full h-16 flex justify-start items-center p-2 space-x-2 bg-white bg-opacity-0 hover:bg-opacity-25">
-        <div class="size-12 bg-white rounded-full relative">
+        <div class="size-12 bg-white rounded-full relative border-2">
           <img [src]="data.userImage" alt="profile" class="w-full h-full object-cover rounded-full" />
         </div>
         <p [class]="'text-xl font-bold text-stroke-white'">{{data.username}}</p>

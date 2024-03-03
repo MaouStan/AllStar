@@ -14,7 +14,7 @@ imageRouter.get('/random', async (req: Request, res: Response) => {
   const userId: string = req.query.userId as string;
 
   let sql = `
-    SELECT image.id, image.userId, image.imageURL, image.name, user.username, user.image
+    SELECT image.id, image.userId, image.imageURL, image.name, user.username, user.image as userImage
     FROM allstarImages image
     LEFT JOIN allstarUsers user 
         ON user.userId = image.userId
