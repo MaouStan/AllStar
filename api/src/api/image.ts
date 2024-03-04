@@ -1,10 +1,11 @@
 import express, { Request, Response } from 'express';
-import { conn, queryAsync } from '../config/dbconnect';
+import { IMAGE_TABLE, conn, queryAsync } from '../config/dbconnect';
 import { QueryError, OkPacket } from 'mysql2';
 import { ImageNewRequest } from '../model/image_new_req';
 import { getStorage, ref } from 'firebase/storage';
 import { app } from '../config/fireabase';
-import { deleteFile } from '../utils/firebase';
+import { deleteFile, uploadFile } from '../utils/firebase';
+import { FileMiddleware } from '../middleware/file_middleware';
 
 export const imageRouter = express.Router();
 
@@ -93,46 +94,11 @@ imageRouter.get('/ranks', (req: Request, res: Response) => {
   });
 });
 
-// POST /api/image
-imageRouter.post('/', async (req: Request, res: Response) => {
-  const image: ImageNewRequest = req.body;
-  // check user limit image
-  let sql = `
-  SELECT COUNT(*) as total, (select allstarSettings.value from allstarSettings where allstarSettings.key = 'MaxImagePerUser') as MaxImagePerUser
-  FROM allstarImages
-  where allstarImages.userId = ?`;
+// // Initial a firebase Storage
+// const storage = getStorage(app);
 
-  let result: any = (await queryAsync(sql, [image.userId]));
-  if (!result) {
-    return res
-      .status(500)
-      .json({ status: 'error', message: 'Internal server error' });
-  }
-
-  if (result[0].total >= result[0].MaxImagePerUser) {
-    return res
-      .status(400)
-      .json({ status: 'error', message: 'Image limit reached' });
-  }
-
-  sql = `INSERT INTO allstarImages (imageURL, name, userId, series_name) VALUES (?, ?, ?, ?)`;
-  conn.query(sql, [image.imageURL, image.name, image.userId, image.series_name], (err: QueryError | null, result: OkPacket[]) => {
-    if (err) {
-      return res
-        .status(500)
-        .json({ status: 'error', message: 'Internal server error' });
-    }
-    res.status(200).json({ status: 'ok', message: 'Image created' });
-  });
-
-});
-
-
-// Initial a firebase Storage
-const storage = getStorage(app);
-
-// Initial a reference to the storage service, which is used to create references in your storage bucket
-const storageRef = ref(storage, 'images');
+// // Initial a reference to the storage service, which is used to create references in your storage bucket
+// const storageRef = ref(storage, 'images');
 // PUT -> DELETE, INSERT /api/image/:id
 // imageRouter.put('/:id', async (req: Request, res: Response) => {
 //   const imageId = req.params.id;
@@ -179,11 +145,11 @@ const storageRef = ref(storage, 'images');
 // PUT /api/image/:id
 imageRouter.put('/:id', async (req: Request, res: Response) => {
   const imageId = req.params.id;
-  const newImageData: ImageNewRequest & { score: number } = req.body;
+  const newImageData: IMAGE_TABLE & { score: number } = req.body;
 
   // get old image data
   let sql = `SELECT * FROM allstarImages WHERE id = ?`;
-  const oldImageData = (await queryAsync(sql, [imageId]) as ImageNewRequest[])[0];
+  const oldImageData = (await queryAsync(sql, [imageId]) as IMAGE_TABLE[])[0];
   if (!oldImageData) {
     return res
       .status(404)
@@ -239,4 +205,57 @@ imageRouter.delete('/:id', (req: Request, res: Response) => {
 
     res.status(200).json({ status: 'ok', message: 'Image deleted' });
   });
+});
+
+
+// config multipart/form-data requests multer 
+const fileMiddleware = new FileMiddleware();
+
+// POST /api/image
+imageRouter.post('/', fileMiddleware.diskLoader.single('file'), async (req: Request, res: Response) => {
+  const image: ImageNewRequest = req.body;
+  const file = req.file;
+
+  if (!file) {
+    return res
+      .status(400)
+      .json({ status: 'error', message: 'Invalid Input' });
+  }
+
+  // check user limit image
+  let sql = `
+  SELECT COUNT(*) as total, (select allstarSettings.value from allstarSettings where allstarSettings.key = 'MaxImagePerUser') as MaxImagePerUser
+  FROM allstarImages
+  where allstarImages.userId = ?`;
+
+  let result: any = (await queryAsync(sql, [image.userId]));
+  if (!result) {
+    return res
+      .status(500)
+      .json({ status: 'error', message: 'Internal server error' });
+  }
+
+  if (result[0].total >= result[0].MaxImagePerUser) {
+    return res
+      .status(400)
+      .json({ status: 'error', message: 'Image limit reached' });
+  }
+
+  const imageURL = await uploadFile(file);
+  if (imageURL === null) {
+    return res
+      .status(500)
+      .json({ status: 'error', message: 'Internal server error' });
+  }
+
+  sql = `INSERT INTO allstarImages (imageURL, name, userId, series_name) VALUES (?, ?, ?, ?)`;
+  conn.query(sql, [imageURL, image.name, image.userId, image.series_name], (err: QueryError | null, result: OkPacket[]) => {
+    if (err) {
+      return res
+        .status(500)
+        .json({ status: 'error', message: 'Internal server error' });
+    }
+    res.status(200).json({ status: 'ok', message: 'Image created' });
+  });
+
 });

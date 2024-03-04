@@ -92,41 +92,21 @@ export class UploadComponent implements OnInit {
     }
 
     const form = $event.target as HTMLFormElement;
-
-    // call allStarService.upload imageFile
-    const uploadResponse = await this.imageService.uploadImage(this.imageFile);
-
-    let imageURL = uploadResponse.data.url;
-    if (!imageURL) {
-      // alert('Image upload failed');
-      // toast
-      Toastify({
-        text: "Image upload failed",
-        backgroundColor: "linear-gradient(to right, #ff5f6d, #ffc371)",
-        duration: 3000,
-        close: true,
-        gravity: "top",
-        position: "right",
-        stopOnFocus: true,
-      }).showToast();
-      this.uploading = false;
-
-      return;
-    }
-
-    const imageUploadData: ImageUploadRequest = {
-      userId: +this.user.userId,
-      imageURL: imageURL,
-      name: form['imageName'].value.trim(),
-      series_name: form['seriesName'].value.trim(),
-      description:
-        form['description'].value.trim() === ''
-          ? null
-          : form['description'].value.trim(),
-    };
+    // create form-data
+    const formData = new FormData();
+    formData.append('file', this.imageFile);
+    formData.append('userId', this.user.userId.toString());
+    formData.append('name', form['imageName'].value.trim());
+    formData.append('series_name', form['seriesName'].value.trim());
+    formData.append(
+      'description',
+      form['description'].value.trim() === ''
+        ? ''
+        : form['description'].value.trim()
+    );
 
     // call allStarService.createPost jsonData
-    await this.imageService.create(imageUploadData);
+    await this.imageService.create(formData);
 
     // reset form
     form.reset();

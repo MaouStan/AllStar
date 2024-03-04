@@ -4,14 +4,25 @@ import { UserNewRequest } from '../model/user_new_req';
 import { USER_TABLE, queryAsync } from '../config/dbconnect';
 import { comparePassword, hashPassword } from '../utils/bcrypt';
 import { OkPacket } from 'mysql2';
+import { FileMiddleware } from '../middleware/file_middleware';
+import { uploadFile } from '../utils/firebase';
 export const authRouter = express.Router();
 
+// config multipart/form-data requests multer 
+const fileMiddleware = new FileMiddleware();
 // POST NEW USER SIGN UP
-authRouter.post('/register', async (req: Request, res: Response) => {
+authRouter.post('/register', fileMiddleware.diskLoader.single('file'), async (req: Request, res: Response) => {
   const user: UserNewRequest = req.body;
-  
+  const file = req.file;
+
+  if (!file) {
+    return res.status(400).json({ status: 'error', message: 'Invalid Input' });
+  }
+
+  const imageURL = await uploadFile(file);
+
   // Check user complete input type
-  if (user.image && user.username && user.password) {
+  if (imageURL && user.username && user.password) {
     // Check username is unique
     let sql = `SELECT * FROM allstarUsers WHERE username = ?`;
     const result = await queryAsync(sql, [user.username]) as USER_TABLE[];
@@ -24,7 +35,7 @@ authRouter.post('/register', async (req: Request, res: Response) => {
 
     // Insert new user
     sql = `INSERT INTO allstarUsers (username, password, image) VALUES (?, ?, ?)`;
-    const resultInsert = await queryAsync(sql, [user.username, user.password, user.image]) as OkPacket;
+    const resultInsert = await queryAsync(sql, [user.username, user.password, imageURL]) as OkPacket;
     if (resultInsert.affectedRows === 0) {
       return res.status(500).json({ status: 'error', message: 'Internal server error' });
     }
@@ -33,7 +44,7 @@ authRouter.post('/register', async (req: Request, res: Response) => {
     const token = generateJWT({
       userId: resultInsert.insertId,
       username: user.username,
-      image: user.image
+      image: imageURL
     });
 
     return res.status(200).json({ status: 'ok', message: 'User created', token: token });

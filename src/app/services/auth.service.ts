@@ -9,6 +9,7 @@ import { SignInReq } from '../models/auth/sign-in-req';
 import { jwtDecode } from "jwt-decode";
 import { DeviceUUID } from 'device-uuid';
 import { UserData } from '../models/auth/userData';
+import { lastValueFrom } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -16,36 +17,21 @@ import { UserData } from '../models/auth/userData';
 export class AuthService {
   constructor(private constants: Constants, private http: HttpClient, private router: Router) { }
 
-  async signUpUser(user: SignUpReq): Promise<void> {
-    this.http.post(this.constants.API_ENDPOINT + '/auth/register', user).subscribe(
-      (data) => {
-        const resp: AuthRes = data as AuthRes;
-        if (resp.status === 'ok' && resp.token) {
-          Toastify({
-            text: 'User registered successfully',
-            backgroundColor: 'linear-gradient(to right, #00b09b, #96c93d)',
-          }).showToast();
+  async signUpUser(user: FormData): Promise<void> {
+    try {
+      const data = await lastValueFrom(this.http.post(this.constants.API_ENDPOINT + '/auth/register', user));
+      const resp: AuthRes = data as AuthRes;
+      if (resp.status === 'ok' && resp.token) {
+        Toastify({
+          text: 'User registered successfully',
+          backgroundColor: 'linear-gradient(to right, #00b09b, #96c93d)',
+        }).showToast();
 
-          // set token
-          localStorage.setItem('token', resp.token);
+        // set token
+        localStorage.setItem('token', resp.token);
 
-          window.location.href = '/'
-        }
-        else {
-          Toastify({
-            text: 'User registration failed',
-            backgroundColor: 'linear-gradient(to right, #ff5f6d, #ffc371)',
-          }).showToast();
-
-          // message
-          Toastify({
-            text: resp.message,
-            backgroundColor: 'linear-gradient(to right, #ff5f6d, #ffc371)',
-          }).showToast();
-        }
-      },
-      (error) => {
-        const resp: AuthRes = error.error as AuthRes;
+        window.location.href = '/';
+      } else {
         Toastify({
           text: 'User registration failed',
           backgroundColor: 'linear-gradient(to right, #ff5f6d, #ffc371)',
@@ -57,39 +43,36 @@ export class AuthService {
           backgroundColor: 'linear-gradient(to right, #ff5f6d, #ffc371)',
         }).showToast();
       }
-    )
+    } catch (error: any) {
+      const resp: AuthRes = error.error as AuthRes;
+      Toastify({
+        text: 'User registration failed',
+        backgroundColor: 'linear-gradient(to right, #ff5f6d, #ffc371)',
+      }).showToast();
+
+      // message
+      Toastify({
+        text: resp.message,
+        backgroundColor: 'linear-gradient(to right, #ff5f6d, #ffc371)',
+      }).showToast();
+    }
   }
 
-  sinInUser(user: SignInReq): void {
-    this.http.post(this.constants.API_ENDPOINT + '/auth/login', user).subscribe(
-      (data) => {
-        const resp: AuthRes = data as AuthRes;
-        if (resp.status === 'ok' && resp.token) {
-          Toastify({
-            text: 'User logged in successfully',
-            backgroundColor: 'linear-gradient(to right, #00b09b, #96c93d)',
-          }).showToast();
+  async sinInUser(user: SignInReq): Promise<void> {
+    try {
+      const data = await lastValueFrom(this.http.post(this.constants.API_ENDPOINT + '/auth/login', user));
+      const resp: AuthRes = data as AuthRes;
+      if (resp.status === 'ok' && resp.token) {
+        Toastify({
+          text: 'User logged in successfully',
+          backgroundColor: 'linear-gradient(to right, #00b09b, #96c93d)',
+        }).showToast();
 
-          // set token
-          localStorage.setItem('token', resp.token);
+        // set token
+        localStorage.setItem('token', resp.token);
 
-          window.location.href = '/'
-        }
-        else {
-          Toastify({
-            text: 'User login failed',
-            backgroundColor: 'linear-gradient(to right, #ff5f6d, #ffc371)',
-          }).showToast();
-
-          // message
-          Toastify({
-            text: resp.message,
-            backgroundColor: 'linear-gradient(to right, #ff5f6d, #ffc371)',
-          }).showToast();
-        }
-      },
-      (error) => {
-        const resp: AuthRes = error.error as AuthRes;
+        window.location.href = '/';
+      } else {
         Toastify({
           text: 'User login failed',
           backgroundColor: 'linear-gradient(to right, #ff5f6d, #ffc371)',
@@ -101,8 +84,21 @@ export class AuthService {
           backgroundColor: 'linear-gradient(to right, #ff5f6d, #ffc371)',
         }).showToast();
       }
-    )
+    } catch (error: any) {
+      const resp: AuthRes = error.error as AuthRes;
+      Toastify({
+        text: 'User login failed',
+        backgroundColor: 'linear-gradient(to right, #ff5f6d, #ffc371)',
+      }).showToast();
+
+      // message
+      Toastify({
+        text: resp.message,
+        backgroundColor: 'linear-gradient(to right, #ff5f6d, #ffc371)',
+      }).showToast();
+    }
   }
+
 
   loggedIn() {
     return localStorage.getItem('token') !== null;
@@ -144,7 +140,7 @@ export class AuthService {
     return machineCode;
   }
 
-  isAdmin(){
+  isAdmin() {
     const user = this.getCurrentUserData();
     if (user) {
       return user.type === 'admin';

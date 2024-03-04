@@ -8,25 +8,27 @@ const storage = getStorage(app);
 // Initial a reference to the storage service, which is used to create references in your storage bucket
 const storageRef = ref(storage, 'images');
 
-export const uploadFile = async (file: Express.Multer.File, res: Response) => {
+export const uploadFile = async (file: Express.Multer.File) => {
   const fileName = generateUniqueFileName(file.originalname);
   const fileBuffer = file.buffer;
   const fileRef = ref(storageRef, fileName);
   try {
     await uploadBytesResumable(fileRef, fileBuffer);
     const url = await getDownloadURL(fileRef);
-    res.status(200).json({
-      status: 'ok',
-      message: 'File uploaded successfully',
-      data: {
-        url: url,
-      }
-    });
+    // res.status(200).json({
+    //   status: 'ok',
+    //   message: 'File uploaded successfully',
+    //   data: {
+    //     url: url,
+    //   }
+    // });
+    return url;
   } catch (error) {
     console.error(error);
-    res
-      .status(500)
-      .json({ status: 'error', message: 'Internal server error' });
+    // res
+    //   .status(500)
+    //   .json({ status: 'error', message: 'Internal server error' });
+    return null
   }
 };
 

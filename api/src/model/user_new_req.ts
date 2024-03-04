@@ -6,4 +6,5 @@ export type UserNewRequest = Subtract<USER_TABLE, {
   userId: number;
   joinDate: Date;
   type: string;
+  image: string;
 }>;

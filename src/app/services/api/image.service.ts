@@ -74,7 +74,7 @@ export class ImageService {
     return resp as APIResponse
   }
 
-  async create(imageUploadRequest: ImageUploadRequest) {
+  async create(imageUploadRequest: FormData) {
     const token = localStorage.getItem('token');
     if (!token) {
       return;

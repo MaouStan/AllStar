@@ -34,10 +34,10 @@ export class SignupComponent {
   isSigning: boolean = false;
 
   async signUp($event: SubmitEvent) {
-    if(this.isSigning) return;
+    $event.preventDefault();
+    if (this.isSigning) return;
     // disable form
     this.isSigning = true;
-    $event.preventDefault();
 
     const mainToast = Toastify({
       text: "Signing up...",
@@ -62,7 +62,7 @@ export class SignupComponent {
     }
 
     // check password match
-    if (user.password !== user.confirmPassword) {
+    if (user.password != user.confirmPassword) {
       // alert('Password does not match');
       // toast
       Toastify({
@@ -95,33 +95,13 @@ export class SignupComponent {
       return;
     }
 
-    // upload image
-    let resp = await this.imageService.uploadImage(this.imageFile);
-    if (resp.status !== 'ok') {
-      // alert('Image upload failed');
-      // toast
-      Toastify({
-        text: "Image upload failed",
-        backgroundColor: "linear-gradient(to right, #ff5f6d, #ffc371)",
-        className: "info",
-        gravity: 'bottom',
-        position: 'right',
-      }).showToast();
-
-      mainToast.hideToast();
-      this.isSigning = false;
-      return;
-    }
-
+    // sign up form-data
+    const formData = new FormData();
+    formData.append('file', this.imageFile);
+    formData.append('username', user.username);
+    formData.append('password', user.password);
     // sign up
-    const userReq: SignUpReq = {
-      username: form['username'].value,
-      password: form['password'].value,
-      image: resp.data.url,
-    }
-
-    await this.authService.signUpUser(userReq);
-
+    await this.authService.signUpUser(formData)
     mainToast.hideToast();
     this.isSigning = false;
   }

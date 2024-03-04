@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-import { app } from './utils/app';
+import { app } from './app';
 import { conn } from './config/dbconnect';
 
 //For env File
