@@ -15,7 +15,7 @@ export class AuthGuard implements CanActivate {
   async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> {
     const loggedIn = this.authService.loggedIn();
     const currentUrl = state.url;
-    console.log(currentUrl)
+    // console.log(currentUrl)
 
     // check if not login and path is 'join'' or 'signin' or 'signup'
     if (loggedIn && currentUrl.includes("/auth")) {
@@ -27,10 +27,15 @@ export class AuthGuard implements CanActivate {
     const isAdmin = this.authService.isAdmin();
     if (isAdmin) {
       // check path only /admin/* another path will redirect to /admin
-      if (!currentUrl.includes('admin')) {
+      if (!currentUrl.includes('/admin')) {
         this.router.navigate(['/admin/dashboard']);
       }
       return true
+    }
+    else{
+      if (currentUrl.includes('/admin')) {
+        this.router.navigate(['/home']);
+      }
     }
 
 

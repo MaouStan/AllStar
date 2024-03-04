@@ -16,18 +16,26 @@ import { UserComponent } from './pages/admin/user/user.component';
 import { RanksComponent } from './pages/admin/ranks/ranks.component';
 import { ReportComponent } from './pages/admin/report/report.component';
 import { DetailComponent } from './pages/admin/detail/detail.component';
+import { LayoutComponent } from './pages/layout/layout.component';
 
 export const routes: Routes = [
 
-  { path: 'home', component: VoteComponent },
-  { path: 'auth/join', component: JoinComponent },
-  { path: 'auth/signin', component: SigninComponent },
-  { path: 'auth/signup', component: SignupComponent },
-  { path: 'auth/logout', component: LogoutComponent },
-  { path: 'chart/:userId', component: ChartComponent, canActivate: [AuthGuard] },
-  { path: 'change', component: ChangePasswordComponent, canActivate: [AuthGuard] },
-  { path: 'ranking', component: RankingComponent },
-  { path: 'upload', component: UploadComponent, canActivate: [AuthGuard] },
+  {
+    path: '',
+    component: LayoutComponent,
+    children: [
+      { path: '', redirectTo: 'home', pathMatch: 'full' },
+      { path: 'home', component: VoteComponent },
+      { path: 'auth/join', component: JoinComponent, canActivate: [AuthGuard] },
+      { path: 'auth/signin', component: SigninComponent, canActivate: [AuthGuard] },
+      { path: 'auth/signup', component: SignupComponent, canActivate: [AuthGuard] },
+      { path: 'auth/logout', component: LogoutComponent },
+      { path: 'chart/:userId', component: ChartComponent, canActivate: [AuthGuard] },
+      { path: 'change', component: ChangePasswordComponent, canActivate: [AuthGuard] },
+      { path: 'ranking', component: RankingComponent },
+      { path: 'upload', component: UploadComponent, canActivate: [AuthGuard] },
+    ]
+  },
 
   {
     path: 'admin',
@@ -43,7 +51,8 @@ export const routes: Routes = [
     ]
   },
 
-  { path: '', redirectTo: 'home', pathMatch: 'full' },
+  // 404 handler redirect to home
+  { path: '**', redirectTo: 'home' }
 ];
 
 // Create the AppRoutingModule

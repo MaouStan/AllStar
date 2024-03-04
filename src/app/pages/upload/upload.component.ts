@@ -126,45 +126,12 @@ export class UploadComponent implements OnInit {
     };
 
     // call allStarService.createPost jsonData
-    const response = await this.imageService.create(imageUploadData);
-    if (response?.status === 'ok') {
-      // toast
-      Toastify({
-        text: "Image uploaded successfully",
-        backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",
-        duration: 3000,
-        close: true,
-        gravity: "top",
-        position: "right",
-        stopOnFocus: true,
-      }).showToast();
+    await this.imageService.create(imageUploadData);
 
-      // reset form
-      form.reset();
-      this.image = null;
-      this.imageFile = null;
-    }
-    else {
-      // toast
-      Toastify({
-        text: "Image upload failed",
-        backgroundColor: "linear-gradient(to right, #ff5f6d, #ffc371)",
-        duration: 3000,
-        close: true,
-        gravity: "top",
-        position: "right",
-        stopOnFocus: true,
-      }).showToast();
-      Toastify({
-        text: response?.message,
-        backgroundColor: "linear-gradient(to right, #ff5f6d, #ffc371)",
-        duration: 3000,
-        close: true,
-        gravity: "top",
-        position: "right",
-        stopOnFocus: true,
-      }).showToast();
-    }
+    // reset form
+    form.reset();
+    this.image = null;
+    this.imageFile = null;
     this.uploading = false;
   }
   handleFileInput($event: Event) {

@@ -7,6 +7,7 @@ import { CardData } from '../../models/card-data';
 import { APIResponse } from '../../models/api-res';
 import { ImageStatResponse } from '../../models/api/image-stats';
 import { ImageUploadRequest } from '../../models/api/image-upload-req';
+import Toastify from 'toastify-js';
 
 @Injectable({
   providedIn: 'root'
@@ -76,13 +77,47 @@ export class ImageService {
   async create(imageUploadRequest: ImageUploadRequest) {
     const token = localStorage.getItem('token');
     if (!token) {
-      return null;
+      return;
     }
 
     // jwt auth header
     const headers = { 'Authorization': `Bearer ${token}` }
 
-    let resp: APIResponse | undefined = await this.http.post<APIResponse>(this.constants.API_ENDPOINT + '/image', imageUploadRequest, { headers: headers }).toPromise();
-    return resp;
+    await this.http.post<APIResponse>(this.constants.API_ENDPOINT + '/image', imageUploadRequest, { headers: headers }).subscribe(
+      (data) => {
+        // toast
+        Toastify({
+          text: "Image uploaded successfully",
+          backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",
+          duration: 3000,
+          close: true,
+          gravity: "top",
+          position: "right",
+          stopOnFocus: true,
+        }).showToast();
+      },
+      (error) => {
+        const resp: APIResponse = error.error as APIResponse;
+        // toast
+        Toastify({
+          text: "Image upload failed",
+          backgroundColor: "linear-gradient(to right, #ff5f6d, #ffc371)",
+          duration: 3000,
+          close: true,
+          gravity: "top",
+          position: "right",
+          stopOnFocus: true,
+        }).showToast();
+        Toastify({
+          text: resp.message,
+          backgroundColor: "linear-gradient(to right, #ff5f6d, #ffc371)",
+          duration: 3000,
+          close: true,
+          gravity: "top",
+          position: "right",
+          stopOnFocus: true,
+        }).showToast();
+      }
+    )
   }
 }

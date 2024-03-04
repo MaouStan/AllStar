@@ -47,6 +47,7 @@ export class CardComponent implements OnInit {
 
     }
 
+    this.showDamage(10); // Test damage animation
   }
 
 
