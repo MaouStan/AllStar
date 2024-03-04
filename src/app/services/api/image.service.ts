@@ -29,7 +29,7 @@ export class ImageService {
       query += 'browserId=' + this.authService.getMachineCode();
     }
 
-    const resp: APIResponse | undefined = await this.http.get<APIResponse>(this.constants.API_ENDPOINT + '/image/random' + query).toPromise();
+    const resp: APIResponse | undefined = await lastValueFrom(this.http.get<APIResponse>(this.constants.API_ENDPOINT + '/image/random' + query));
     if (resp?.status === 'ok') {
       const data = resp.data as CardData[]
       return data;
@@ -47,7 +47,7 @@ export class ImageService {
     // jwt auth header
     const headers = { 'Authorization': `Bearer ${token}` };
 
-    let resp: APIResponse | undefined = await this.http.get<APIResponse>(this.constants.API_ENDPOINT + `/user/${userId}/stats`, { headers: headers }).toPromise();
+    let resp: APIResponse | undefined = await lastValueFrom(this.http.get<APIResponse>(this.constants.API_ENDPOINT + `/user/${userId}/stats`, { headers: headers }));
     if (resp?.status === 'ok') {
       resp.data = (resp.data as any[]).map((res: any) => {
         let scores: string[] | number[] = res.scores.split(',');
@@ -83,41 +83,40 @@ export class ImageService {
     // jwt auth header
     const headers = { 'Authorization': `Bearer ${token}` }
 
-    await this.http.post<APIResponse>(this.constants.API_ENDPOINT + '/image', imageUploadRequest, { headers: headers }).subscribe(
-      (data) => {
-        // toast
-        Toastify({
-          text: "Image uploaded successfully",
-          backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",
-          duration: 3000,
-          close: true,
-          gravity: "top",
-          position: "right",
-          stopOnFocus: true,
-        }).showToast();
-      },
-      (error) => {
-        const resp: APIResponse = error.error as APIResponse;
-        // toast
-        Toastify({
-          text: "Image upload failed",
-          backgroundColor: "linear-gradient(to right, #ff5f6d, #ffc371)",
-          duration: 3000,
-          close: true,
-          gravity: "top",
-          position: "right",
-          stopOnFocus: true,
-        }).showToast();
-        Toastify({
-          text: resp.message,
-          backgroundColor: "linear-gradient(to right, #ff5f6d, #ffc371)",
-          duration: 3000,
-          close: true,
-          gravity: "top",
-          position: "right",
-          stopOnFocus: true,
-        }).showToast();
-      }
-    )
+    try {
+      const resp: APIResponse = await lastValueFrom(this.http.post<APIResponse>(this.constants.API_ENDPOINT + '/image', imageUploadRequest, { headers: headers }));
+
+      // toast
+      Toastify({
+        text: "Image uploaded successfully",
+        backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",
+        duration: 3000,
+        close: true,
+        gravity: "top",
+        position: "right",
+        stopOnFocus: true,
+      }).showToast();
+    } catch (error: any) {
+      const resp: APIResponse = error.error as APIResponse;
+      // toast
+      Toastify({
+        text: "Image upload failed",
+        backgroundColor: "linear-gradient(to right, #ff5f6d, #ffc371)",
+        duration: 3000,
+        close: true,
+        gravity: "top",
+        position: "right",
+        stopOnFocus: true,
+      }).showToast();
+      Toastify({
+        text: resp.message,
+        backgroundColor: "linear-gradient(to right, #ff5f6d, #ffc371)",
+        duration: 3000,
+        close: true,
+        gravity: "top",
+        position: "right",
+        stopOnFocus: true,
+      }).showToast();
+    }
   }
 }
