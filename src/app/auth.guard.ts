@@ -18,9 +18,13 @@ export class AuthGuard implements CanActivate {
     // console.log(currentUrl)
 
     // check if not login and path is 'join'' or 'signin' or 'signup'
+    console.log(loggedIn, currentUrl)
     if (loggedIn && currentUrl.includes("/auth")) {
       this.router.navigate(['/home']);
       return false;
+    }
+    else if (!loggedIn && currentUrl.includes("/auth")) {
+      return true
     }
 
     // check if admin
@@ -32,7 +36,7 @@ export class AuthGuard implements CanActivate {
       }
       return true
     }
-    else{
+    else {
       if (currentUrl.includes('/admin')) {
         this.router.navigate(['/home']);
       }
