@@ -14,17 +14,17 @@ const dbConfig = {
   pool: {
     max: 20,
     min: 0,
-    acquire: 30000,
-    idle: 10000,
   },
 };
 // MySQL
 // Connect To The Database
-export const conn = mysql.createConnection({
+export const conn = mysql.createPool({
   host: dbConfig.HOST,
   user: dbConfig.USER,
   password: dbConfig.PASSWORD,
   database: dbConfig.DB,
+  connectionLimit: dbConfig.pool.max,
+  waitForConnections: true,
 });
 
 // Query Async
