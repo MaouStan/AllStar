@@ -24,7 +24,6 @@ export class Top10Component implements OnInit {
   ngOnInit(): void {
     this.imageService.getTop10().then((data: ImageRank[]) => {
       this.users = data;
-      console.log(data)
     });
   }
 }

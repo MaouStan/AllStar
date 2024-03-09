@@ -13,15 +13,15 @@
       <div class="w-full flex flex-col gap-4 justify-center items-center">
         <div class="w-full flex gap-4 justify-center items-center text-6xl text-center font-bold px-48">
           <!-- row1 top 1 -->
-          <div class="realtive w-auto h-auto pt-12">
+          <div *ngIf="users.length >= 2" class="realtive w-auto h-auto pt-12">
             #2
             <app-rank-card [data]="users[1]" />
           </div>
-          <div class="realtive w-auto h-auto">
+          <div *ngIf="users.length >= 1" class="realtive w-auto h-auto">
             #1
             <app-rank-card [data]="users[0]" />
           </div>
-          <div class="realtive w-auto h-auto pt-24">
+          <div *ngIf="users.length >= 3" class="realtive w-auto h-auto pt-24">
             #3
             <app-rank-card [data]="users[2]" />
           </div>
@@ -30,7 +30,7 @@
     </div>
 
     <!-- Another -->
-    <div class="w-5/6 mx-auto h-auto py-4">
+    <div *ngIf="users.length >= 4" class="w-5/6 mx-auto h-auto py-4">
       <!-- table, head -> rank,  name, score -->
       <table class="w-full h-auto">
         <thead class="w-full h-16 text-3xl font-bold">
