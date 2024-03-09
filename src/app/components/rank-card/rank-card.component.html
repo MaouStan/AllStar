@@ -1,0 +1,40 @@
+<div class="relative mx-auto w-80 h-96">
+  <div class="realtive w-full h-full flex items-center justify-center flex-col gap-6">
+    <div
+      [class]="'w-full h-full mx-auto overflow-hidden bg-white/50 rounded-xl border-4 self-center flex flex-col justify-start items-center'"
+      [style.border-color]="color" [style.background-color]="color">
+      <div class="w-full h-16 flex justify-between items-center p-2 space-x-2 bg-white bg-opacity-0">
+        <p [class]="'text-xl font-bold text-stroke-white'">{{data.name}}</p>
+        <div class="w-auto h-full flex items-center justify-center gap-4">
+          <!-- trophy -->
+          <p class="w-auto h-full flex items-center justify-center text-xs gap-1">
+            <fa-icon [icon]="faTrophy" class=" text-yellow-500" />
+            {{data.currentRank}}
+            <!-- old rank increase/decrease -->
+            <fa-icon *ngIf="data.currentRank < data.yesterdayRank" [icon]="faArrowUp" class=" text-green-500" />
+            <fa-icon *ngIf="data.currentRank > data.yesterdayRank" [icon]="faArrowDown" class=" text-red-500" />
+            <!-- text -->
+            <span *ngIf="data.yesterdayRank !== data.currentRank"
+              [style.color]="data.yesterdayRank < data.currentRank ? 'red' : 'green'">{{Math.abs(data.yesterdayRank - data.currentRank)}}</span>
+          </p>
+          <!-- score point -->
+          <p class="w-auto h-full flex items-center justify-center text-xs gap-1">
+            <fa-icon [icon]="faStar" class=" text-yellow-500" />
+            {{data.currentScore}} pt
+            <!-- yesterday score increase/decrease -->
+            <fa-icon *ngIf="data.currentScore > data.yesterdayScore" [icon]="faArrowUp" class=" text-green-500" />
+            <fa-icon *ngIf="data.currentScore < data.yesterdayScore" [icon]="faArrowDown" class=" text-red-500" />
+            <!-- text -->
+            <span *ngIf="data.yesterdayScore !== data.currentScore"
+              [style.color]="data.yesterdayScore > data.currentScore ? 'red' : 'green'">{{(Math.abs(data.currentScore - data.yesterdayScore)).toFixed(2)}}</span>
+          </p>
+        </div>
+      </div>
+
+      <!-- image -->
+      <div class="w-full h-full bg-white overflow-hidden flex relative cursor-pointer hover:opacity-90">
+        <img [src]="data.imageURL" alt="image_upload" class="w-full h-full object-cover" />
+      </div>
+    </div>
+  </div>
+</div>

@@ -158,7 +158,7 @@ export class ChartComponent implements OnInit {
           data: image.scores.map((score: any, index: any) => {
             return { x: index + 1, y: score };
           }),
-          label: `${image.name} (${image.series_name})`,
+          label: `${image.name}`,
           fill: false,
           tension: 0.5,
           borderColor: this.getRandomColor(),
@@ -275,7 +275,7 @@ export class ChartComponent implements OnInit {
           currentIndex > 0
             ? +this.Images[currentDatasetIndex].scores[currentIndex - 2]
             : currentScore;
-        // if prev value is NaN 
+        // if prev value is NaN
         if (isNaN(previousScore)) {
           previousScore = currentScore;
         }
@@ -295,11 +295,10 @@ export class ChartComponent implements OnInit {
           span2.textContent =
             (isIncrease ? '↑' : '↓') +
             ' ' +
-            Math.abs(currentScore - previousScore);
+            Math.abs(currentScore - previousScore).toFixed(2);
           span2.style.color = isIncrease ? '#4caf50' : '#f44336';
           span2.style.fontSize = '12px';
           span2.style.textAlign = 'right';
-          // spanValue.textContent = '' + Math.abs(currentScore - previousScore);
         } else {
           // remove
           span2.textContent = '';

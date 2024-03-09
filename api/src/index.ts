@@ -11,11 +11,12 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 
-  conn.connect((err) => {
+  // Connect to the database
+  conn.getConnection((err) => {
     if (err) {
-      console.log('Error Connecting To The Database', err);
-      return;
+      console.error('Error connecting to the database:', err);
+    } else {
+      console.log('Connected to the database');
     }
-    console.log('Connected To The Database');
   });
 });

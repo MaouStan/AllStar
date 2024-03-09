@@ -1,13 +1,33 @@
 import express, { Request, Response } from 'express';
 import { VoteRequest } from '../model/vote_req';
 import { conn, queryAsync } from '../config/dbconnect';
-import Elo from '@studimax/elo';
+// import Elo from '@studimax/elo';
 
 export const voteRouter = express.Router();
 
 type responseType = {
   score: number
 };
+
+
+const calculatePerformance = (Ra: number, Rb: number) => {
+  const PERF = 400;
+  return {
+    Ea: 1 / (1 + 10 ** ((Rb - Ra) / PERF)),
+    Eb: 1 / (1 + 10 ** ((Ra - Rb) / PERF))
+  }
+};
+
+const calculateRating = (Ra: number, Rb: number, Sa: number) => {
+  const K = 32;
+  const { Ea, Eb } = calculatePerformance(Ra, Rb);
+  return {
+    Ra: Ra + K * (Sa - Ea),
+    Rb: Rb + K * ((1 - Sa) - Eb),
+    Ea: Ea,
+    Eb: Eb
+  }
+}
 
 // Elo Rating
 voteRouter.post('/', async (req: Request, res: Response) => {
@@ -29,10 +49,11 @@ voteRouter.post('/', async (req: Request, res: Response) => {
     }
 
     // Elo Rating Calculate
-    const elo = new Elo({ kFactor: 32 });
+    // const elo = new Elo({ kFactor: 32 });
     // Ra = winnerNewScore, Rb = loserNewScore
-    let { Ea, Eb } = elo.calculatePerformance(winnerOldScore[0].score, loserOldScore[0].score);
-    let { Ra: newWinnerScore, Rb: newLoserScore } = elo.calculateRating(winnerOldScore[0].score, loserOldScore[0].score, 1); // 1 = win
+    // let { Ea, Eb } = elo.calculatePerformance(winnerOldScore[0].score, loserOldScore[0].score);
+    // let { Ra: newWinnerScore, Rb: newLoserScore } = elo.calculateRating(winnerOldScore[0].score, loserOldScore[0].score, 1); // 1 = win
+    let { Ea, Eb, Ra: newWinnerScore, Rb: newLoserScore } = calculateRating(winnerOldScore[0].score, loserOldScore[0].score, 1); // 1 = win
 
     // Insert Vote Event
     sql = `INSERT INTO allstarVoting (userId, browserId, imageId, score) VALUES (?, ?, ?, ?)`;

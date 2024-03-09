@@ -5,6 +5,32 @@ import { comparePassword, hashPassword } from '../utils/bcrypt';
 
 export const userRouter = express.Router();
 
+// GET /api/user
+userRouter.get('/', (req: Request, res: Response) => {
+  const sql = `
+    SELECT
+    allstarUsers.userId,
+    allstarUsers.username,
+    allstarUsers.image,
+    DATE_FORMAT(allstarUsers.joinDate, '%d-%m-%Y %H:%i:%s') AS joinDate,
+    IFNULL(DATE_FORMAT(MAX(GREATEST(allstarImages.last_update, vote.timestamp)), '%d-%m-%Y %H:%i:%s'), DATE_FORMAT(allstarUsers.joinDate, '%d-%m-%Y %H:%i:%s')) AS lastActivity
+    FROM allstarUsers
+    LEFT JOIN allstarVoting vote ON allstarUsers.userId = vote.userId
+    LEFT JOIN allstarImages ON vote.imageId = allstarImages.id
+    WHERE type = 'user'
+    GROUP BY allstarUsers.userId, allstarUsers.username, allstarUsers.image, allstarUsers.joinDate
+  `;
+
+  conn.query(sql, (err, result: OkPacket[]) => {
+    if (err) {
+      return res
+        .status(500)
+        .json({ status: 'error', message: err });
+    }
+    res.status(200).json({ status: 'ok', data: result });
+  });
+});
+
 // GET /api/user/:id
 userRouter.get('/:id', (req: Request, res: Response) => {
   const userId = req.params.id;

@@ -8,7 +8,6 @@ import { LogoutComponent } from './pages/auth/logout/logout.component';
 import { ChartComponent } from './pages/chart/chart.component';
 import { ChangePasswordComponent } from './pages/change-password/change-password.component';
 import { UploadComponent } from './pages/upload/upload.component';
-import { RankingComponent } from './pages/ranking/ranking.component';
 import { AuthGuard } from './auth.guard';
 import { DashboardComponent } from './pages/admin/dashboard/dashboard.component';
 import { AdminComponent } from './pages/admin/admin.component';
@@ -17,6 +16,7 @@ import { RanksComponent } from './pages/admin/ranks/ranks.component';
 import { ReportComponent } from './pages/admin/report/report.component';
 import { DetailComponent } from './pages/admin/detail/detail.component';
 import { LayoutComponent } from './pages/layout/layout.component';
+import { Top10Component } from './pages/top10/top10.component';
 
 export const routes: Routes = [
 
@@ -32,7 +32,7 @@ export const routes: Routes = [
       { path: 'auth/logout', component: LogoutComponent },
       { path: 'chart/:userId', component: ChartComponent, canActivate: [AuthGuard] },
       { path: 'change', component: ChangePasswordComponent, canActivate: [AuthGuard] },
-      { path: 'ranking', component: RankingComponent },
+      { path: 'top10', component: Top10Component },
       { path: 'upload', component: UploadComponent, canActivate: [AuthGuard] },
     ]
   },
@@ -40,13 +40,13 @@ export const routes: Routes = [
   {
     path: 'admin',
     component: AdminComponent,
-    canActivate: [AuthGuard],
+    // canActivate: [AuthGuard],
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', component: DashboardComponent },
-      { path: 'user', component: UserComponent },
+      { path: 'users', component: UserComponent },
       { path: 'ranks', component: RanksComponent },
-      { path: 'report', component: ReportComponent },
+      { path: 'reports', component: ReportComponent },
       { path: 'detail', component: DetailComponent },
     ]
   },

@@ -24,7 +24,6 @@ export const conn = mysql.createPool({
   password: dbConfig.PASSWORD,
   database: dbConfig.DB,
   connectionLimit: dbConfig.pool.max,
-  waitForConnections: true,
 });
 
 // Query Async

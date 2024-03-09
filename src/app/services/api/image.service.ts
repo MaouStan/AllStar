@@ -8,6 +8,7 @@ import { APIResponse } from '../../models/api-res';
 import { ImageStatResponse } from '../../models/api/image-stats';
 import { ImageUploadRequest } from '../../models/api/image-upload-req';
 import Toastify from 'toastify-js';
+import { ImageRank } from '../../models/api/image-ranks';
 
 @Injectable({
   providedIn: 'root'
@@ -66,14 +67,6 @@ export class ImageService {
     return [];
   }
 
-  async uploadImage(file: File): Promise<APIResponse> {
-    const formData = new FormData();
-    formData.append('file', file);
-    let resp = await lastValueFrom(this.http.post(this.constants.API_ENDPOINT + '/upload', formData));
-
-    return resp as APIResponse
-  }
-
   async create(imageUploadRequest: FormData) {
     const token = localStorage.getItem('token');
     if (!token) {
@@ -118,5 +111,14 @@ export class ImageService {
         stopOnFocus: true,
       }).showToast();
     }
+  }
+
+  async getTop10() {
+    let resp: APIResponse | undefined = await lastValueFrom(this.http.get<APIResponse>(this.constants.API_ENDPOINT + '/image/top10'));
+    if (resp?.status === 'ok') {
+      const data = resp.data as ImageRank[];
+      return data;
+    }
+    return [];
   }
 }

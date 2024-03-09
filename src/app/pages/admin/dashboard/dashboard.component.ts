@@ -23,9 +23,6 @@ import { RouterModule } from '@angular/router';
 })
 export class DashboardComponent {
   faUser = faUser;
-  faChartColumn = faChartColumn;
-  faMedal = faMedal;
   faFileContract = faFileContract;
-  faRightFromBracket = faRightFromBracket;
   faImage = faImage;
 }

@@ -1,73 +1,50 @@
-import { Component, inject } from '@angular/core';
-import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { FormsModule } from '@angular/forms';
-import { MatSelectModule } from '@angular/material/select';
-import { CommonModule } from '@angular/common';
+import { UserService } from './../../../services/api/user.service';
+import { Component, OnInit, inject } from '@angular/core';
+import { faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import {
-  faUser,
-  faChartColumn,
-  faMedal,
-  faFileContract,
-  faRightFromBracket,
-} from '@fortawesome/free-solid-svg-icons';
-import { Router, RouterModule } from '@angular/router';
+import { AdminUsers } from '../../../models/admin/user';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
-interface Food {
-  value: string;
-  viewValue: string;
-}
 
 @Component({
   selector: 'app-user',
   standalone: true,
   imports: [
-    MatInputModule,
-    MatFormFieldModule,
-    FormsModule,
-    MatSelectModule,
-    CommonModule,
     FontAwesomeModule,
+    CommonModule,
     RouterModule,
+    FormsModule
   ],
   templateUrl: './user.component.html',
   styleUrl: './user.component.scss'
 })
-export class UserComponent {
-  foods: Food[] = [
-    { value: 'steak-0', viewValue: 'Steak' },
-    { value: 'pizza-1', viewValue: 'Pizza' },
-    { value: 'tacos-2', viewValue: 'Tacos' },
-  ];
+export class UserComponent implements OnInit {
+  faAngleRight = faAngleRight
+  faAngleLeft = faAngleLeft
 
-  router = inject(Router);
+  userService = inject(UserService)
 
-  faUser = faUser;
-  faChartColumn = faChartColumn;
-  faMedal = faMedal;
-  faFileContract = faFileContract;
-  faRightFromBracket = faRightFromBracket;
-  currentPage: number = 1; // บันทึกหน้าปัจจุบัน
-  itemsPerPage: number = 10; // จำนวนรายการต่อหน้า
+  users: AdminUsers[] = [];
+  userResults: AdminUsers[] = [];
+  searchText: string = ''
+  currentPage = 1;
+  itemsPerPage = 10;
+  totalPages!: number;
+  window = window;
 
-  nextPage() {
-    this.currentPage++; // เพิ่มค่า input เมื่อกด next
+  async ngOnInit(): Promise<void> {
+    this.users = await this.userService.getUsers();
+    this.userResults = this.users;
+    this.totalPages = Math.ceil(this.users.length / this.itemsPerPage);
   }
 
-  previousPage() {
-    if (this.currentPage > 1) {
-      this.currentPage--; // ลดหน้าปัจจุบันเมื่อกด previous
-    }
+  search() {
+    this.userResults = this.users.filter((user) => {
+      return user.username.toLowerCase().includes(this.searchText.toLowerCase());
+    });
+    this.totalPages = Math.ceil(this.userResults.length / this.itemsPerPage);
+    this.currentPage = 1
   }
-
-  // คำนวณเลขเริ่มต้นและสิ้นสุดของหน้าปัจจุบัน
-  currentPageStartIndex(): number {
-    return (this.currentPage - 1) * this.itemsPerPage; // ลดค่าลง 1
-  }
-
-  currentPageEndIndex(): number {
-    return this.currentPage * this.itemsPerPage - 1; // ลดค่าลง 1
-  }
-
 }
