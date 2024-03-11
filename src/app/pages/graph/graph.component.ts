@@ -10,11 +10,11 @@ import { ImageService } from '../../services/api/image.service';
 import { ImageStatResponse } from '../../models/api/image-stats';
 
 @Component({
-  selector: 'app-chart',
+  selector: 'app-graph',
   standalone: true,
   imports: [NgChartsModule, CommonModule, FontAwesomeModule],
-  templateUrl: './chart.component.html',
-  styleUrls: ['./chart.component.scss'],
+  templateUrl: './graph.component.html',
+  styleUrls: ['./graph.component.scss'],
 })
 export class ChartComponent implements OnInit {
   dates: string[] = [];

@@ -121,4 +121,14 @@ export class ImageService {
     }
     return [];
   }
+
+  // get ranks /image/ranks
+  async getRanks() {
+    let resp: APIResponse | undefined = await lastValueFrom(this.http.get<APIResponse>(this.constants.API_ENDPOINT + '/image/ranks'));
+    if (resp?.status === 'ok') {
+      const data = resp.data as ImageRank[];
+      return data;
+    }
+    return [];
+  }
 }

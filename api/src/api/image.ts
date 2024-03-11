@@ -15,18 +15,20 @@ imageRouter.get('/random', async (req: Request, res: Response) => {
   const userId: string = req.query.userId as string;
 
   let sql = `
-    SELECT image.id, image.userId, image.imageURL, image.name, user.username, user.image as userImage
+    SELECT image.id, image.userId, image.imageURL, image.name, user.username, user.image as userImage, COUNT(voting.imageId) as voteCount
     FROM allstarImages image
     LEFT JOIN allstarUsers user
         ON user.userId = image.userId
+    LEFT JOIN allstarVoting voting
+        ON voting.imageId = image.id
     WHERE NOT EXISTS (
-        SELECT 1 FROM allstarVoting voting
-        WHERE voting.imageId = image.id
-        AND voting.timestamp >= NOW() - INTERVAL (SELECT value FROM allstarSettings WHERE \`key\` = 'ASTime') SECOND
-        ${userId ? `AND voting.userId = ${userId}` : browserId ? `AND voting.browserId = '${browserId}'` : ''}
+        SELECT 1 FROM allstarVoting
+        WHERE imageId = image.id
+        AND timestamp >= NOW() - INTERVAL (SELECT value FROM allstarSettings WHERE \`key\` = 'ASTime') SECOND
+        ${userId ? `AND userId = ${userId}` : browserId ? `AND browserId = '${browserId}'` : ''}
     )
     GROUP BY image.id
-    ORDER BY RAND() * COUNT(image.id) + 10 ASC
+    ORDER BY RAND() * COUNT(voting.imageId) + 10 ASC
     LIMIT 2
   `;
 

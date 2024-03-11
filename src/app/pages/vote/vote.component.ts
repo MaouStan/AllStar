@@ -106,7 +106,7 @@ export class VoteComponent implements OnInit, AfterViewInit {
         this.showDamage()
       }
       // wait 1.6 sec
-      await new Promise(resolve => setTimeout(resolve, 3000));
+      await new Promise(resolve => setTimeout(resolve, 1000));
       this.images = []
       this.retryCount = 0;
       this.setup();
@@ -127,7 +127,7 @@ export class VoteComponent implements OnInit, AfterViewInit {
       this.showDamage()
     }
     // wait 1.6 sec
-    await new Promise(resolve => setTimeout(resolve, 3000));
+    await new Promise(resolve => setTimeout(resolve, 1000));
     this.images = []
     this.retryCount = 0;
     this.setup();

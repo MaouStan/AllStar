@@ -60,7 +60,7 @@ export class CardComponent implements OnInit {
     // Reset damage text after a delay
     setTimeout(() => {
       this.damageState = 'void';
-    }, 2100); // Adjust the duration the damage text is visible (in milliseconds)
+    }, 800); // Adjust the duration the damage text is visible (in milliseconds)
   }
 
 }

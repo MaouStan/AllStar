@@ -1,21 +1,21 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 import { CommonModule } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faUser, faChartColumn, faMedal, faFileContract, faRightFromBracket, faImage } from '@fortawesome/free-solid-svg-icons';
 import { RouterModule } from '@angular/router';
-
-interface Food {
-  value: string;
-  viewValue: string;
-}
+import { ImageRank } from '../../../models/api/image-ranks';
+import { ImageService } from '../../../services/api/image.service';
+import { RankCardComponent } from "../../../components/rank-card/rank-card.component";
+import { faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-ranks',
   standalone: true,
+  templateUrl: './ranks.component.html',
+  styleUrl: './ranks.component.scss',
   imports: [
     MatInputModule,
     MatFormFieldModule,
@@ -23,45 +23,22 @@ interface Food {
     MatSelectModule,
     CommonModule,
     FontAwesomeModule,
-    RouterModule
-  ],
-  templateUrl: './ranks.component.html',
-  styleUrl: './ranks.component.scss'
+    RouterModule,
+    RankCardComponent,
+    FontAwesomeModule
+  ]
 })
-export class RanksComponent {
-  foods: Food[] = [
-    { value: 'steak-0', viewValue: 'Steak' },
-    { value: 'pizza-1', viewValue: 'Pizza' },
-    { value: 'tacos-2', viewValue: 'Tacos' },
-  ];
-  faUser = faUser;
-  faChartColumn = faChartColumn;
-  faMedal = faMedal;
-  faFileContract = faFileContract;
-  faRightFromBracket = faRightFromBracket;
-  faImage = faImage;
-
-
-  currentPage: number = 1; // บันทึกหน้าปัจจุบัน
-  itemsPerPage: number = 10; // จำนวนรายการต่อหน้า
-
-  nextPage() {
-    this.currentPage++; // เพิ่มค่า input เมื่อกด next
-  }
-
-  previousPage() {
-    if (this.currentPage > 1) {
-      this.currentPage--; // ลดหน้าปัจจุบันเมื่อกด previous
-    }
-  }
-
-  // คำนวณเลขเริ่มต้นและสิ้นสุดของหน้าปัจจุบัน
-  currentPageStartIndex(): number {
-    return (this.currentPage - 1) * this.itemsPerPage; // ลดค่าลง 1
-  }
-
-  currentPageEndIndex(): number {
-    return this.currentPage * this.itemsPerPage - 1; // ลดค่าลง 1
+export class RanksComponent implements OnInit {
+  images: ImageRank[] = []
+  currentPage = 1;
+  itemsPerPage = 8;
+  totalPages!: number;
+  faAngleRight = faAngleRight
+  faAngleLeft = faAngleLeft
+  imageService = inject(ImageService)
+  async ngOnInit(): Promise<void> {
+    this.images = await this.imageService.getRanks();
+    this.totalPages = Math.ceil(this.images.length / this.itemsPerPage);
   }
 }
 

@@ -1,112 +1,32 @@
-<body>
-  <div class="w-full h-full flex items-center justify-center">
-      <!-- <p class="w-full text-5xl font-bold text-stoke-blue text-center">
-      Change Password
-  </p> -->
-  <div class="w-full h-full flex flex-col text-center" style="background-color: #070C22;">
-      <img style="width: 395px; height: 285px; object-fit: cover;"
-          src="https://hips.hearstapps.com/hmg-prod/images/jujutsu-kaisen-season-2-64a6dff90b3e8.png?crop=0.566xw:1.00xh;0,0&resize=1200:*"
-          alt="">
-      <div class="h-full flex flex-col justify-between">
-          <div class="flex text-4xl">
-              <div class="w-full flex flex-col items-start justify-start pl-14 font-bold">
-                  <a routerLink="/admin/dashboard" class="hov pt-5 text-4xl flex">
-                      <fa-icon class="pr-6" [icon]="faChartColumn" />
-                      Dashboard
-                  </a>
-                  <a routerLink="/admin/user" [routerLinkActive]="'text-red-500'" class="hov pt-5 text-4xl flex ">
-                      <fa-icon class="pr-6" [icon]="faUser" />
-                      Users
-                  </a>
-                  <a routerLink="/admin/ranks"  [routerLinkActive]="'text-red-500'"  class=" pt-5 text-4xl flex ">
-                      <fa-icon class="pr-6" [icon]="faMedal" />
-                      Ranks
-                  </a>
-                  <a routerLink="/admin/report" class="hov pt-5 text-4xl flex ">
-                      <fa-icon class="pr-6" [icon]="faFileContract" />
-                      Report
-                  </a>
-              </div>
-          </div>
-          <div class="pb-10 w-full flex flex-col items-start justify-start pl-14 font-bold">
-              <a routerLink="auth/logout"  class="hov pt-5 text-4xl flex ">
-                  <fa-icon class="pr-6" [icon]="faRightFromBracket" />
-                  Logout
-              </a>
-          </div>
-      </div>
+<div class="w-full h-full bg-[#12182caa] flex flex-col justify-center items-center overflow-hidden px-2">
+  <!-- images -->
+  <div class="w-full h-full flex flex-wrap justify-center items-center overflow-hidden gap-2 overflow-y-auto">
+    <app-rank-card *ngFor="let image of images.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)"
+      [data]="image" />
   </div>
-      <div style="background-color: rgb(18, 24, 44, 0.8);" class="w-full h-full p-10">
-          <div class="flex justify-between pb-3">
-              <div class="w-full flex flex-end items-center" style="display: flex; justify-content: flex-end;">
-                  <p class="text-xl pb-5 pr-5"><b>Sort by</b></p>
-                  <mat-form-field>
-                      <mat-label style="font-weight: bold; color: black;">Ranks</mat-label>
-                      <mat-select>
-                          @for (food of foods; track food) {
-                          <mat-option [value]="food.value">{{food.viewValue}}</mat-option>
-                          }
-                      </mat-select>
-                  </mat-form-field>
-              </div>
-          </div>
+  <!--  pagination -->
+  <div class="w-full h-14 flex justify-center items-center p-4 gap-2">
+    <!-- left -->
+    <button (click)="currentPage = currentPage - 1 <= totalPages ? currentPage - 1 : 1"
+      class="w-10 h-10 bg-[#436af6] hover:bg-[#436af6aa] rounded-full flex justify-center items-center disabled:bg-gray-700"
+      [disabled]="currentPage === 1">
+      <fa-icon [icon]="faAngleLeft" />
+    </button>
 
-          <div style="width: 1500px;" class="w-full flex justify-center items-center">
-              <ng-container *ngFor="let _ of [].constructor(5)">
-                  <div class="flex justify-center items-center pr-5" style="width: 270px; height: 320px;">
-                      <div
-                          class='w-full h-full mx-auto overflow-hidden bg-white/50 rounded-xl border-[#f64363] border-2 self-center flex flex-col justify-start items-center'>
-                          <div class="w-full h-16 bg-white/50 flex justify-start items-center p-2 space-x-2">
-                              <div class="size-12 bg-white rounded-full"></div>
-                              <p [class]="'text-xl text-[#f64363] text-stroke-white'">MaouStan</p>
-                          </div>
-                          <!-- image -->
-                          <div class="w-full h-full bg-white">
-                              <img style="width: 346px; height: 456px;"
-                                  src="https://i.pinimg.com/originals/10/c2/c2/10c2c227f83c695cd4c08981e85a540b.jpg"
-                                  alt="">
-                          </div>
-                      </div>
-                  </div>
-              </ng-container>
-          </div>
-          <div class="w-full flex justify-center items-center pt-5">
-              <ng-container *ngFor="let _ of [].constructor(5)">
-                  <div class="w-full flex justify-center items-center pr-5" style="width: 270px; height: 320px;">
-                      <div
-                          class='w-full h-full mx-auto overflow-hidden bg-white/50 rounded-xl border-[#f64363] border-2 self-center flex flex-col justify-start items-center'>
-                          <div class="w-full h-16 bg-white/50 flex justify-start items-center p-2 space-x-2">
-                              <div class="size-12 bg-white rounded-full"></div>
-                              <p [class]="'text-xl text-[#f64363] text-stroke-white'">MaouStan</p>
-                          </div>
+    <!-- page number can input of ... -->
+    <div class="w-auto h-10 flex justify-center bg-[#f64363] rounded-lg items-center py-1 px-4 gap-2">
+      <input
+        class="w-10 h-full text-center bg-white rounded-md text-[#f64363] placeholder:text-[#f64363] [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+        [value]="currentPage" type="number" min="1" max="{{totalPages}}">
+      <span> / {{totalPages}}</span>
+    </div>
 
-                          <!-- image -->
-                          <div class="bg-white">
-                              <img style="width: 346px; height: 456px;"
-                                  src="https://i.pinimg.com/originals/10/c2/c2/10c2c227f83c695cd4c08981e85a540b.jpg"
-                                  alt="">
-                          </div>
-                      </div>
-                  </div>
-              </ng-container>
-          </div>
-          <div class="w-full flex pt-10 items-center justify-center">
-              <div class="pr-2">
-                  <button class="button" (click)="previousPage()">prev</button>
-              </div>
-              <div class="pr-2">
-                  <input class="text-center"
-                      style="font-weight: 600; font-size: 20px; width: 30px; height: 30px; color: #F64363;"
-                      type="text" [value]="currentPage">
-              </div>
-              <div class="pr-2">
-                  <p class="" style="font-weight: 400; font-size: 20px; color: #F64363;">of 30</p>
-              </div>
-              <div>
-                  <button class=" button" (click)="nextPage()">next</button>
-              </div>
-          </div>
-      </div>
+    <!-- right -->
+    <button (click)="currentPage = currentPage + 1 <= totalPages ? currentPage + 1 : totalPages"
+      class="w-10 h-10 bg-[#436af6] hover:bg-[#436af6aa] rounded-full flex justify-center items-center disabled:bg-gray-700"
+      [disabled]="currentPage === totalPages">
+      <fa-icon [icon]="faAngleRight" />
+    </button>
   </div>
 
-</body>
+</div>

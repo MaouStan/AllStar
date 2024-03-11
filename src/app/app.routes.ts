@@ -5,7 +5,7 @@ import { JoinComponent } from './pages/auth/join/join.component';
 import { SigninComponent } from './pages/auth/signin/signin.component';
 import { SignupComponent } from './pages/auth/signup/signup.component';
 import { LogoutComponent } from './pages/auth/logout/logout.component';
-import { ChartComponent } from './pages/chart/chart.component';
+import { ChartComponent } from './pages/graph/graph.component';
 import { ChangePasswordComponent } from './pages/change-password/change-password.component';
 import { UploadComponent } from './pages/upload/upload.component';
 import { AuthGuard } from './auth.guard';
