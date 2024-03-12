@@ -1,16 +1,11 @@
 export interface ImageRank {
-  id:             number;
-  userId:         number;
-  imageURL:       string;
-  score:          number;
-  name:           string;
-  series_name:    string;
-  description:    null;
-  last_update:    string;
-  currentScore:   number;
-  user_username:  string;
-  user_image:     string;
-  currentRank:    number;
-  yesterdayRank:  number;
-  yesterdayScore: number;
+  imageId:         number;
+  imageURL:        string;
+  name:            string;
+  today_score:     number;
+  today_rank:      number;
+  yesterday_score: number;
+  yesterday_rank:  number;
+  user_username:   string;
+  user_image:      string;
 }

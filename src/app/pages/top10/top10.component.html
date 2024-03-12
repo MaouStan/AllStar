@@ -1,82 +1,46 @@
-<main class="relative w-full h-full max-h-full flex-grow flex-col pb-12 gap-6">
-  <div class="relative flex flex-col w-full h-full grow">
+<main class="relative w-full h-full max-h-full flex-grow flex-col pb-12 gap-6 -mt-12">
+  <div class="relative flex flex-col w-full h-full grow gap-2">
     <!-- Title -->
     <div class="h-auto flex pt-4 md:pt-2 pb-4 md:py-0 md:pb-9 items-center justify-center">
       <p class="text-4xl md:text-6xl font-bold text-stoke-red text-center">
         <!-- icon -->
         <fa-icon [icon]="faTrophy" class="text-6xl md:text-7xl text-yellow-500"></fa-icon>
-        Anime Ranking
+        Anime Top10
       </p>
     </div>
-    <!-- Top3 -->
-    <div class="w-full h-auto">
-      <div class="w-full flex flex-col gap-4 justify-center items-center">
-        <div class="w-full flex gap-4 justify-center items-center text-6xl text-center font-bold px-48">
-          <!-- row1 top 1 -->
-          <div *ngIf="users.length >= 2" class="realtive w-auto h-auto pt-12">
-            #2
-            <app-rank-card [data]="users[1]" />
-          </div>
-          <div *ngIf="users.length >= 1" class="realtive w-auto h-auto">
-            #1
-            <app-rank-card [data]="users[0]" />
-          </div>
-          <div *ngIf="users.length >= 3" class="realtive w-auto h-auto pt-24">
-            #3
-            <app-rank-card [data]="users[2]" />
+    <div *ngIf="users.length > 0; else loading" class="relative flex flex-col w-full h-full grow gap-2">
+      <!-- Top3 -->
+      <div class="w-full h-auto">
+        <div class="w-full flex flex-col gap-4 justify-center items-center">
+          <div class="w-full flex gap-4 justify-center items-center text-6xl text-center font-bold px-48">
+            <!-- row1 top 1 -->
+            <div *ngIf="users.length >= 2" class="realtive w-auto h-auto pt-24">
+              #2
+              <app-rank-card [data]="users[1]" color="#5171e4" />
+            </div>
+            <div *ngIf="users.length >= 1" class="realtive w-auto h-auto -mt-48">
+              #1
+              <app-rank-card [data]="users[0]" color="#f64363" />
+            </div>
+            <div *ngIf="users.length >= 3" class="realtive w-auto h-auto pt-32">
+              #3
+              <app-rank-card [data]="users[2]" color="#5171e4" />
+            </div>
           </div>
         </div>
       </div>
+
+      <!-- Another -->
+      <div *ngIf="users.length >= 4" class="w-full max-w-6xl justify-center items-center h-auto xl:px-16 mx-auto py-4 flex gap-2 flex-wrap">
+        <app-rank-card *ngFor="let image of users.slice(3)" [data]="image" [size]="2" />
+      </div>
     </div>
 
-    <!-- Another -->
-    <div *ngIf="users.length >= 4" class="w-5/6 mx-auto h-auto py-4">
-      <!-- table, head -> rank,  name, score -->
-      <table class="w-full h-auto">
-        <thead class="w-full h-16 text-3xl font-bold">
-          <tr>
-            <th class="w-1/6">Rank</th>
-            <th class="w-4/6">Name</th>
-            <th class="w-1/6">Score</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let user of users.slice(3)" class="relative w-full h-auto max-h-16 overflow-hidden text-xl">
-            <td class="py-2">
-              <p class="text-2xl font-bold gap-2">
-                {{ user.currentRank }}
-                <!-- old rank increase/decrease -->
-                <fa-icon *ngIf="user.currentRank < user.yesterdayRank" [icon]="faArrowUp"
-                  class=" text-xs text-green-500" />
-                <fa-icon *ngIf="user.currentRank > user.yesterdayRank" [icon]="faArrowDown"
-                  class=" text-xs text-red-500" />
-                <!-- text -->
-                <span *ngIf="user.yesterdayRank !== user.currentRank" class="text-xs"
-                  [style.color]="user.yesterdayRank < user.currentRank ? 'red' : 'green'">{{Math.abs(user.yesterdayRank
-                  - user.currentRank)}}</span>
-              </p>
-            </td>
-            <td class="py-2 flex w-full h-24 items-center justify-start gap-4">
-              <img class="size-20 object-cover rounded-full" [src]="user.imageURL" alt="User Image">
-              {{ user.name }}
-            </td>
-            <td class="py-2">
-              <p class="text-2xl font-bold flex gap-2">
-                {{ user.currentScore }} pt
-                <!-- yesterday score increase/decrease -->
-                <fa-icon *ngIf="user.currentScore > user.yesterdayScore" [icon]="faArrowUp"
-                  class=" text-xs text-green-500" />
-                <fa-icon *ngIf="user.currentScore < user.yesterdayScore" [icon]="faArrowDown"
-                  class=" text-xs text-red-500" />
-                <!-- text -->
-                <span *ngIf="user.yesterdayScore !== user.currentScore" class="text-xs"
-                  [style.color]="user.yesterdayScore > user.currentScore ? 'red' : 'green'">{{Math.abs(user.currentScore
-                  - user.yesterdayScore).toFixed(2)}}</span>
-              </p>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    <ng-template #loading>
+      <div class="relative flex w-full h-full pr-2 md:pr-0 grow gap-5 flex-col justify-center items-center mx-auto">
+        <fa-icon [icon]="faSpinner" class="text-9xl text-stoke-red animate-spin" />
+      </div>
+    </ng-template>
   </div>
+
 </main>

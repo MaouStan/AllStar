@@ -17,6 +17,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 export class RankCardComponent {
   @Input() data!: ImageRank;
   @Input() color!: string;
+  @Input() size: number = 1;
 
   faTrophy = faTrophy;
   faArrowUp = faArrowUp;

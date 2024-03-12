@@ -71,47 +71,23 @@ imageRouter.get('/:imageId/stats', (req: Request, res: Response) => {
 imageRouter.get('/top10', (req: Request, res: Response) => {
   const imageId = req.params.imageId;
   let sql = `
-    SELECT ai.*,
+    SELECT
+      ai.id as imageId,
+      ai.imageURL,
+      ai.name,
+      ai.score AS today_score,
+      RANK() OVER (ORDER BY ai.score DESC) AS today_rank,
+      COALESCE((SELECT av.score FROM allstarVoting AS av WHERE av.imageId = ai.id AND DATEDIFF(NOW(), av.timestamp) >= 1 ORDER BY av.timestamp DESC LIMIT 1), ai.score) AS yesterday_score,
+      RANK() OVER (ORDER BY COALESCE((SELECT av.score FROM allstarVoting AS av WHERE av.imageId = ai.id AND DATEDIFF(NOW(), av.timestamp) >= 1 ORDER BY av.timestamp DESC LIMIT 1), ai.score) desc) AS yesterday_rank,
       u.username AS user_username,
-      u.image AS user_image,
-      RANK() OVER (ORDER BY currentScore DESC) AS currentRank,
-      currentScore,
-      yesterdayRank,
-      yesterdayScore
-    FROM (
-    SELECT ai.*,
-          COALESCE(v.score, ai.score) AS currentScore
-    FROM allstarImages ai
-    LEFT JOIN (
-      SELECT imageId, score
-      FROM (
-          SELECT imageId, score, timestamp,
-                  RANK() OVER (PARTITION BY imageId ORDER BY timestamp DESC) AS rn
-          FROM allstarVoting
-          WHERE DATE(timestamp) = CURDATE()
-      ) latest_scores
-      WHERE rn = 1
-    ) v ON ai.id = v.imageId
-    ) ai
-    LEFT JOIN (
-    SELECT ai.id,
-          COALESCE(v2.score, ai.score) AS yesterdayScore,
-          RANK() OVER (ORDER BY COALESCE(v2.score, ai.score) DESC) AS yesterdayRank
-    FROM allstarImages ai
-    LEFT JOIN (
-      SELECT imageId, score, timestamp
-      FROM (
-          SELECT imageId, score, timestamp,
-                  RANK() OVER (PARTITION BY imageId ORDER BY timestamp DESC) AS rn
-          FROM allstarVoting
-          WHERE DATE(timestamp) = CURDATE() - INTERVAL 1 DAY
-      ) latest_scores
-      WHERE rn = 1
-    ) v2 ON ai.id = v2.imageId
-    ) yesterday ON ai.id = yesterday.id
-    LEFT JOIN allstarUsers u ON ai.userId = u.userId
-    ORDER BY currentRank ASC
-    LIMIT 10;
+      u.image AS user_image
+    FROM
+      allstarImages AS ai
+    LEFT JOIN
+      allstarUsers AS u ON ai.userId = u.userId
+    group by ai.id
+    order by today_rank asc
+    limit 10
   `
 
   conn.query(sql, [imageId], (err: QueryError | null, result: OkPacket[]) => {
@@ -128,48 +104,24 @@ imageRouter.get('/top10', (req: Request, res: Response) => {
 
 // GET /api/image/ranks
 imageRouter.get('/ranks', (req: Request, res: Response) => {
-  const sql = `
-    SELECT ai.*,
+  let sql = `
+    SELECT
+      ai.id as imageId,
+      ai.imageURL,
+      ai.name,
+      ai.score AS today_score,
+      RANK() OVER (ORDER BY ai.score DESC) AS today_rank,
+      COALESCE((SELECT av.score FROM allstarVoting AS av WHERE av.imageId = ai.id AND DATEDIFF(NOW(), av.timestamp) >= 1 ORDER BY av.timestamp DESC LIMIT 1), ai.score) AS yesterday_score,
+      RANK() OVER (ORDER BY COALESCE((SELECT av.score FROM allstarVoting AS av WHERE av.imageId = ai.id AND DATEDIFF(NOW(), av.timestamp) >= 1 ORDER BY av.timestamp DESC LIMIT 1), ai.score) desc) AS yesterday_rank,
       u.username AS user_username,
-      u.image AS user_image,
-      RANK() OVER (ORDER BY currentScore DESC) AS currentRank,
-      currentScore,
-      yesterdayRank,
-      yesterdayScore
-    FROM (
-    SELECT ai.*,
-          COALESCE(v.score, ai.score) AS currentScore
-    FROM allstarImages ai
-    LEFT JOIN (
-      SELECT imageId, score
-      FROM (
-          SELECT imageId, score, timestamp,
-                  RANK() OVER (PARTITION BY imageId ORDER BY timestamp DESC) AS rn
-          FROM allstarVoting
-          WHERE DATE(timestamp) = CURDATE()
-      ) latest_scores
-      WHERE rn = 1
-    ) v ON ai.id = v.imageId
-    ) ai
-    LEFT JOIN (
-    SELECT ai.id,
-          COALESCE(v2.score, ai.score) AS yesterdayScore,
-          RANK() OVER (ORDER BY COALESCE(v2.score, ai.score) DESC) AS yesterdayRank
-    FROM allstarImages ai
-    LEFT JOIN (
-      SELECT imageId, score, timestamp
-      FROM (
-          SELECT imageId, score, timestamp,
-                  RANK() OVER (PARTITION BY imageId ORDER BY timestamp DESC) AS rn
-          FROM allstarVoting
-          WHERE DATE(timestamp) = CURDATE() - INTERVAL 1 DAY
-      ) latest_scores
-      WHERE rn = 1
-    ) v2 ON ai.id = v2.imageId
-    ) yesterday ON ai.id = yesterday.id
-    LEFT JOIN allstarUsers u ON ai.userId = u.userId
-    ORDER BY currentRank ASC;
-  `;
+      u.image AS user_image
+    FROM
+      allstarImages AS ai
+    LEFT JOIN
+      allstarUsers AS u ON ai.userId = u.userId
+    group by ai.id
+    order by today_rank asc
+  `
 
   conn.query(sql, (err: QueryError | null, result: OkPacket[]) => {
     if (err) {

@@ -1,6 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faArrowDown, faArrowUp, faTrophy } from '@fortawesome/free-solid-svg-icons';
+import { faArrowDown, faArrowUp, faSpinner, faTrophy } from '@fortawesome/free-solid-svg-icons';
 import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
 import { ImageService } from '../../services/api/image.service';
@@ -17,6 +17,7 @@ export class Top10Component implements OnInit {
   faTrophy = faTrophy;
   faArrowUp = faArrowUp;
   faArrowDown = faArrowDown;
+  faSpinner = faSpinner;
   Math = Math;
   imageService = inject(ImageService);
   users: ImageRank[] = [];

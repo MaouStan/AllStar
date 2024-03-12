@@ -35,7 +35,7 @@ export const routes: Routes = [
       { path: 'change', component: ChangePasswordComponent, canActivate: [AuthGuard] },
       { path: 'top10', component: Top10Component },
       { path: 'upload', component: UploadComponent, canActivate: [AuthGuard] },
-      { path: 'profile', component: ProfileComponent},
+      { path: 'profile', component: ProfileComponent },
     ]
   },
 
