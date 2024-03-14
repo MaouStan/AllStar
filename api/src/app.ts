@@ -21,12 +21,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // secure apps by setting various HTTP headers
 app.use(helmet()); // security
-app.use(
-  cors({
-    origin: process.env.CORS_ORIGIN, // allow the frontend to access this server
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  })
-);
+// app.use(
+//   cors({
+//     origin: process.env.CORS_ORIGIN, // allow the frontend to access this server
+//     methods: ['GET', 'POST', 'PUT', 'DELETE'],
+//   })
+// );
 
 // JWT middleware
 app.use(jwtAuthen);
