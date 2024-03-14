@@ -15,9 +15,10 @@ export const jwtAuthen = expressjwt({
     '/api/auth/login',
     '/api/image/top10',
     '/api/image/random',
-    '/api/image/ranks',
+    // '/api/image/ranks',
     '/api/vote',
     '/api/upload',
     '/api/user',
+    // '/api/user/1/stats',
   ],
 });

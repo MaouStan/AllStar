@@ -94,22 +94,62 @@ userRouter.put('/:id', async (req: Request, res: Response) => {
 // GET /api/user/:userId/stats
 userRouter.get('/:userId/stats', (req: Request, res: Response) => {
   const userId = req.params.userId;
-  const sql = `CALL allstarGetAllImageScores(?)`;
+  const sql = `
+      select
+      xx.id,
+          xx.userId,
+          xx.imageURL,
+          xx.name,
+          CONCAT(scores, ",", xx.score) as scores
+    from (SELECT
+      ai.*,
+      GROUP_CONCAT(
+          COALESCE(scores.score, 'NaN')
+          ORDER BY scores.n DESC
+      ) AS scores
+    FROM
+      allstarImages AS ai
+    LEFT JOIN (
+      SELECT
+          n,
+          ai.id AS imageId,
+          (
+              SELECT
+                  score
+              FROM
+                  allstarVoting AS av
+              WHERE
+                  DATE(av.timestamp) <= DATE(NOW()) - INTERVAL days.n DAY
+                  AND av.imageId = ai.id
+                  AND av.timestamp >= ai.last_update
+              ORDER BY
+                  av.timestamp DESC
+              LIMIT 1
+          ) AS score
+      FROM (
+          SELECT 1 AS n UNION ALL
+          SELECT 2 UNION ALL
+          SELECT 3 UNION ALL
+          SELECT 4 UNION ALL
+          SELECT 5 UNION ALL
+          SELECT 6
+      ) AS days,
+      allstarImages AS ai
+    ) AS scores ON ai.id = scores.imageId
+    WHERE
+      ai.userId = ?
+    GROUP BY
+      ai.id) as xx
+  `;
 
-  conn.query(sql, [userId], (err: QueryError | null, result: OkPacket[]) => {
+  conn.query(sql, [+userId], (err: QueryError | null, result: OkPacket[]) => {
     if (err) {
-      if (err?.sqlState === '45000') {
-        return res
-          .status(200)
-          .json({ status: 'ok', data: [] });
-      }
-
       return res
         .status(500)
-        .json({ status: 'error', message: 'Internal server error' });
+        .json({ status: 'error', message: err });
     }
 
-    res.status(200).json({ status: 'ok', data: result[0] });
+    res.status(200).json({ status: 'ok', data: result });
   });
 });
 
