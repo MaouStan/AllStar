@@ -16,6 +16,7 @@ const dbConfig = {
     min: 0,
   },
 };
+
 // MySQL
 // Connect To The Database
 export const conn = mysql.createPool({
@@ -24,6 +25,8 @@ export const conn = mysql.createPool({
   password: dbConfig.PASSWORD,
   database: dbConfig.DB,
   connectionLimit: dbConfig.pool.max,
+  waitForConnections: true,
+  queueLimit: 0,
 });
 
 // Query Async
