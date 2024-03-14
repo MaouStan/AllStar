@@ -3,12 +3,11 @@ import { Constants } from '../config/constants';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import Toastify from 'toastify-js'
-import { SignUpReq } from '../models/auth/sign-up-req';
 import { AuthRes } from '../models/auth/auth-res';
 import { SignInReq } from '../models/auth/sign-in-req';
 import { jwtDecode } from "jwt-decode";
 import { DeviceUUID } from 'device-uuid';
-import { UserData } from '../models/auth/userData';
+import { userDataToken } from '../models/auth/userDataToken';
 import { lastValueFrom } from 'rxjs';
 
 @Injectable({
@@ -114,7 +113,7 @@ export class AuthService {
     // decode token
     if (refresh === undefined) refresh = true
     if (token) {
-      const decoded = jwtDecode(token) as UserData
+      const decoded = jwtDecode(token) as userDataToken
 
       // check expired
       if (decoded.exp * 1000 < Date.now()) {

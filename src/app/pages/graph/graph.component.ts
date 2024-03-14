@@ -30,12 +30,12 @@ export class ChartComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     // get the last 7 days
-    for (let i = 8; i >= 1; i--) {
+    for (let i = 7; i >= 0; i--) {
       const date = new Date();
       date.setDate(date.getDate() - i);
       this.dates.push(date.toDateString());
     }
-    this.dates.push(new Date().toDateString());
+    this.dates.push('');
 
     // get userId from url
     const userId = this.activateRoute.snapshot.params['userId'] || null;
@@ -46,7 +46,6 @@ export class ChartComponent implements OnInit {
 
     // get the images
     this.Images = await this.imageService.getImagesStats(userId);
-    this.loaded = true;
 
     let min: number = Number.MAX_VALUE;
     let max: number = Number.MIN_VALUE;
@@ -88,7 +87,7 @@ export class ChartComponent implements OnInit {
           },
           beginAtZero: true,
           min: 0.6,
-          max: 8.6,
+          max: 7.6,
           ticks: {
             color: '#f0f',
             font: {
@@ -170,6 +169,24 @@ export class ChartComponent implements OnInit {
         };
       }),
     };
+
+    // check all image is loaded
+    let loaded = 0;
+    this.Images.forEach((image: ImageStatResponse) => {
+      const img = new Image();
+      img.onload = () => {
+        loaded++;
+        if (loaded === this.Images.length) {
+          this.loaded = true;
+        }
+      };
+      img.src = image.imageURL;
+    });
+
+    // set the loaded to true if there are no images
+    if (this.Images.length === 0) {
+      this.loaded = true;
+    }
   }
 
   getOrCreateTooltip = (chart: {

@@ -1,0 +1,54 @@
+<main class="relative w-full h-full max-h-full flex-grow flex-col pb-12 gap-6 -mt-12">
+  <div *ngIf="user; else loading" class="relative flex flex-col w-full h-full grow gap-12 pt-16">
+    <!-- profile details -->
+    <section class="w-full h-96 bg-gray-100/40 flex items-center justify-center overflow-hidden rounded-lg">
+      <!-- image -->
+      <div class="w-96 h-full">
+        <img [src]="user.image" alt="profile image" class="w-auto h-full object-cover" />
+      </div>
+      <!-- detail -->
+      <div class="w-full h-full flex flex-col justify-start items-start p-4">
+        <!-- name -->
+        <h1 class="text-4xl w-full p-2 h-auto font-bold">{{ user.username }}</h1>
+        <!-- bio -->
+        <p class="text-lg w-full h-full p-2 text-gray-200 text-wrap border-2 rounded-lg bg-yellow-200/20">{{ user.note
+          || "note" }}</p>
+      </div>
+    </section>
+
+    <!-- images uploaded -->
+    <section class="w-full h-auto flex flex-col items-center justify-center gap-4 py-5">
+      <!-- top right button if images < 5 Add New -->
+      <div *ngIf="user.images!.length < 5" class="w-full h-auto flex justify-end items-center">
+        <a routerLink="/upload"
+          class="w-24 h-auto py-4 px-2 bg-[#F64363] text-white rounded-lg flex justify-center items-center self-end">
+          <fa-icon [icon]="faPlus" class="text-4xl" />
+          <span>Add New</span>
+        </a>
+      </div>
+      <!-- map rank-card -->
+      <div class="w-full min-h-full flex justify-center items-center">
+        <div class="w-auto h-auto flex items-center justify-center gap-4 relative flex-wrap">
+          <div class="relative w-auto h-auto flex flex-col justify-center items-center"
+            *ngFor="let image of user.images">
+            <app-rank-card [data]="image" [size]="1" />
+            <div class="flex gap-2 absolute bottom-0 right-0 p-2">
+              <fa-icon [icon]="faEdit"
+                class="text-2xl p-2 rounded-lg hover:bg-white hover:text-black bg-yellow-500 cursor-pointer" />
+              <fa-icon [icon]="faTrash"
+                class="text-2xl p-2 rounded-lg hover:bg-white hover:text-black bg-red-500 cursor-pointer" />
+            </div>
+          </div>
+        </div>
+
+        <p *ngIf="user.images!.length === 0" class="text-2xl text-gray-200">No images uploaded</p>
+      </div>
+    </section>
+  </div>
+
+  <ng-template #loading>
+    <div class="relative flex w-full h-full pr-2 md:pr-0 grow gap-5 flex-col justify-center items-center mx-auto">
+      <fa-icon [icon]="faSpinner" class="text-9xl text-stoke-red animate-spin" />
+    </div>
+  </ng-template>
+</main>

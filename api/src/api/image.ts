@@ -28,7 +28,7 @@ imageRouter.get('/random', async (req: Request, res: Response) => {
         ${userId ? `AND userId = ${userId}` : browserId ? `AND browserId = '${browserId}'` : ''}
     )
     GROUP BY image.id
-    ORDER BY RAND() * COUNT(voting.imageId) + 10 ASC
+    ORDER BY RAND() * (COUNT(voting.imageId)+1) asc
     LIMIT 2
   `;
 
@@ -77,14 +77,16 @@ imageRouter.get('/top10', (req: Request, res: Response) => {
       ai.name,
       ai.score AS today_score,
       RANK() OVER (ORDER BY ai.score DESC) AS today_rank,
-      COALESCE((SELECT av.score FROM allstarVoting AS av WHERE av.imageId = ai.id AND DATEDIFF(NOW(), av.timestamp) >= 1 ORDER BY av.timestamp DESC LIMIT 1), ai.score) AS yesterday_score,
-      RANK() OVER (ORDER BY COALESCE((SELECT av.score FROM allstarVoting AS av WHERE av.imageId = ai.id AND DATEDIFF(NOW(), av.timestamp) >= 1 ORDER BY av.timestamp DESC LIMIT 1), ai.score) desc) AS yesterday_rank,
-      u.username AS user_username,
-      u.image AS user_image
+      CASE
+          WHEN DATE(ai.last_update) = CURDATE() THEN NULL
+          ELSE COALESCE((SELECT av.score FROM allstarVoting AS av WHERE av.imageId = ai.id AND DATEDIFF(CURDATE(), av.timestamp) >= 1 ORDER BY av.timestamp DESC LIMIT 1), ai.score)
+      END AS yesterday_score,
+      CASE
+          WHEN DATE(ai.last_update) = CURDATE() THEN NULL
+          ELSE RANK() OVER (ORDER BY COALESCE((SELECT av.score FROM allstarVoting AS av WHERE av.imageId = ai.id AND DATEDIFF(CURDATE(), av.timestamp) >= 1 ORDER BY av.timestamp DESC LIMIT 1), ai.score) DESC)
+      END AS yesterday_rank
     FROM
       allstarImages AS ai
-    LEFT JOIN
-      allstarUsers AS u ON ai.userId = u.userId
     group by ai.id
     order by today_rank asc
     limit 10
@@ -111,14 +113,16 @@ imageRouter.get('/ranks', (req: Request, res: Response) => {
       ai.name,
       ai.score AS today_score,
       RANK() OVER (ORDER BY ai.score DESC) AS today_rank,
-      COALESCE((SELECT av.score FROM allstarVoting AS av WHERE av.imageId = ai.id AND DATEDIFF(NOW(), av.timestamp) >= 1 ORDER BY av.timestamp DESC LIMIT 1), ai.score) AS yesterday_score,
-      RANK() OVER (ORDER BY COALESCE((SELECT av.score FROM allstarVoting AS av WHERE av.imageId = ai.id AND DATEDIFF(NOW(), av.timestamp) >= 1 ORDER BY av.timestamp DESC LIMIT 1), ai.score) desc) AS yesterday_rank,
-      u.username AS user_username,
-      u.image AS user_image
+      CASE
+          WHEN DATE(ai.last_update) = CURDATE() THEN NULL
+          ELSE COALESCE((SELECT av.score FROM allstarVoting AS av WHERE av.imageId = ai.id AND DATEDIFF(CURDATE(), av.timestamp) >= 1 ORDER BY av.timestamp DESC LIMIT 1), ai.score)
+      END AS yesterday_score,
+      CASE
+          WHEN DATE(ai.last_update) = CURDATE() THEN NULL
+          ELSE RANK() OVER (ORDER BY COALESCE((SELECT av.score FROM allstarVoting AS av WHERE av.imageId = ai.id AND DATEDIFF(CURDATE(), av.timestamp) >= 1 ORDER BY av.timestamp DESC LIMIT 1), ai.score) DESC)
+      END AS yesterday_rank
     FROM
       allstarImages AS ai
-    LEFT JOIN
-      allstarUsers AS u ON ai.userId = u.userId
     group by ai.id
     order by today_rank asc
   `

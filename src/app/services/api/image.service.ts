@@ -113,6 +113,23 @@ export class ImageService {
     }
   }
 
+  async getUserImages(userId: number) {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      return [];
+    }
+
+    // jwt auth header
+    const headers = { 'Authorization': `Bearer ${token}` }
+
+    const resp = await lastValueFrom(this.http.get<APIResponse>(this.constants.API_ENDPOINT + `/user/${userId}/images`, {headers: headers}));
+    if (resp?.status === 'ok') {
+      const data = resp.data as ImageRank[];
+      return data;
+    }
+    return [];
+  }
+
   async getTop10() {
     let resp: APIResponse | undefined = await lastValueFrom(this.http.get<APIResponse>(this.constants.API_ENDPOINT + '/image/top10'));
     if (resp?.status === 'ok') {

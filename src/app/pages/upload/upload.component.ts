@@ -7,11 +7,11 @@ import {
   faArrowDown,
   faCloudArrowDown,
 } from '@fortawesome/free-solid-svg-icons';
-import { UserData } from '../../models/auth/userData';
 import { AuthService } from '../../services/auth.service';
 import { ImageService } from '../../services/api/image.service';
 import { ImageUploadRequest } from '../../models/api/image-upload-req';
 import Toastify from 'toastify-js'
+import { userDataToken } from '../../models/auth/userDataToken';
 
 @Component({
   selector: 'app-upload',
@@ -21,7 +21,7 @@ import Toastify from 'toastify-js'
   styleUrl: './upload.component.scss',
 })
 export class UploadComponent implements OnInit {
-  user: UserData | null = this.authService.getCurrentUserData();
+  user: userDataToken | null = this.authService.getCurrentUserData();
 
   constructor(
     private authService: AuthService,

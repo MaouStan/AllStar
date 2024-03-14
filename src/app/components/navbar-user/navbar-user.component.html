@@ -15,15 +15,15 @@
     <a [routerLink]="'/chart/'+user?.userId" [routerLinkActive]="'border-b-2 border-[#F64363]'"
       class="hover:text-[#f64363]" (click)="isOpened = false">Graph</a>
     <!-- user icon circle -->
-    <div class="dropdown">
+    <div class="dropdown z-10">
       <div (click)="router.navigate(['/profile', user?.userId])"
         class="w-12 h-12 bg-[#F64363] cursor-pointer border-2 rounded-full overflow-hidden flex justify-center items-center hover:bg-[#f64363] hover:text-white">
         <img class="w-full h-full object-cover" [src]="user?.image" alt="">
       </div>
       <div class="dropdown-content bg-slate-500 flex flex-col items-center justify-center">
         <p class="text-white text-lg font-bold">Hello, {{user?.username}}</p>
-        <a class="dropdown-item" routerLink="/change">Change Password</a>
-        <a class="dropdown-item" routerLink="/upload">Upload</a>
+        <a class="dropdown-item" [routerLinkActive]="'!bg-[#f64363]'" routerLink="/change">Change Password</a>
+        <a class="dropdown-item" [routerLinkActive]="'!bg-[#f64363]'" routerLink="/upload">Upload</a>
         <a class="dropdown-item" routerLink="/auth/logout">Logout</a>
       </div>
     </div>

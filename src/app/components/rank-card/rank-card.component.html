@@ -12,10 +12,12 @@
             <span>{{data.today_rank}}</span>
             <div class="absolute -bottom-1 right-0">
               <!-- old rank increase/decrease -->
-              <fa-icon *ngIf="data.today_rank < data.yesterday_rank" [icon]="faArrowUp" class=" text-green-500" />
-              <fa-icon *ngIf="data.today_rank > data.yesterday_rank" [icon]="faArrowDown" class=" text-red-500" />
+              <fa-icon *ngIf="data.today_rank < data.yesterday_rank && data.yesterday_rank !== null" [icon]="faArrowUp"
+                class=" text-green-500" />
+              <fa-icon *ngIf="data.today_rank > data.yesterday_rank && data.yesterday_rank !== null"
+                [icon]="faArrowDown" class=" text-red-500" />
               <!-- text -->
-              <span *ngIf="data.yesterday_rank !== data.today_rank"
+              <span *ngIf="data.yesterday_rank !== data.today_rank && data.yesterday_rank !== null"
                 [style.color]="data.yesterday_rank < data.today_rank ? 'red' : 'green'">{{Math.abs(data.yesterday_rank -
                 data.today_rank)}}
               </span>
@@ -27,10 +29,14 @@
             <span>{{data.today_score}} pt</span>
             <div class="absolute -bottom-1 right-0">
               <!-- yesterday score increase/decrease -->
-              <fa-icon *ngIf="data.today_score > data.yesterday_score" [icon]="faArrowUp" class=" text-green-500" />
-              <fa-icon *ngIf="data.today_score < data.yesterday_score" [icon]="faArrowDown" class=" text-red-500" />
+              <fa-icon
+                *ngIf="data.today_score > data.yesterday_score && data.yesterday_score !== data.today_score && data.yesterday_score !== null"
+                [icon]="faArrowUp" class=" text-green-500" />
+              <fa-icon
+                *ngIf="data.today_score < data.yesterday_score && data.yesterday_score !== data.today_score && data.yesterday_score !== null"
+                [icon]="faArrowDown" class=" text-red-500" />
               <!-- text -->
-              <span *ngIf="data.yesterday_score !== data.today_score"
+              <span *ngIf="data.yesterday_score !== data.today_score && data.yesterday_score !== null"
                 [style.color]="data.yesterday_score > data.today_score ? 'red' : 'green'">{{(Math.abs(data.today_score
                 -
                 data.yesterday_score)).toFixed(2)}}</span>

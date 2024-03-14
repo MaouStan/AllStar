@@ -61,7 +61,7 @@ export class VoteComponent implements OnInit, AfterViewInit {
 
   async setup() {
     if (this.retryCount > 3) {
-      this.message = "No Image Enough. Please try again later.";
+      this.message = "No Image Enough For You. Please try again later.";
       return
     }
     this.images = await this.imageService.getImageRandom();

@@ -58,7 +58,7 @@ userRouter.get('/:id', (req: Request, res: Response) => {
 // PUT /api/user/:id
 userRouter.put('/:id', async (req: Request, res: Response) => {
   const userId = req.params.id;
-  const user: USER_TABLE & { oldPassword?: string } = req.body;
+  const user: USER_TABLE & { oldPassword?: string, newPassword?: string } = req.body;
   // Get Old Data User by id
   let sql = `SELECT * FROM allstarUsers WHERE userId = ?`;
   const oldUserData: USER_TABLE = (await queryAsync(sql, [userId]) as USER_TABLE[])[0];
@@ -67,7 +67,7 @@ userRouter.put('/:id', async (req: Request, res: Response) => {
   }
 
   // check if user want to update password
-  if (user!.password) {
+  if (user.newPassword) {
     // check if user input old password
     if (!user.oldPassword) {
       return res.status(400).json({ status: 'error', message: 'Old password is required' });
@@ -79,11 +79,11 @@ userRouter.put('/:id', async (req: Request, res: Response) => {
     }
 
     // Hash new password
-    user.password = await hashPassword(user.password);
+    user.password = await hashPassword(user.newPassword);
   }
 
   // Merge new data with old data
-  const { oldPassword, ...newUserData } = { ...oldUserData, ...user };
+  const { oldPassword, newPassword, ...newUserData } = { ...oldUserData, ...user };
 
   // Update User
   sql = `UPDATE allstarUsers SET ? WHERE userId = ?`;
@@ -110,5 +110,43 @@ userRouter.get('/:userId/stats', (req: Request, res: Response) => {
     }
 
     res.status(200).json({ status: 'ok', data: result[0] });
+  });
+});
+
+// GET /api/user/:userId/images
+userRouter.get('/:userId/images', (req: Request, res: Response) => {
+  const userId = req.params.userId;
+  const sql = `
+  select * from(
+      SELECT
+        ai.id as imageId,
+        ai.imageURL,
+        ai.name,
+        ai.score AS today_score,
+        ai.userId,
+        RANK() OVER (ORDER BY ai.score DESC) AS today_rank,
+        CASE
+            WHEN DATE(ai.last_update) = CURDATE() THEN NULL
+            ELSE COALESCE((SELECT av.score FROM allstarVoting AS av WHERE av.imageId = ai.id AND DATEDIFF(CURDATE(), av.timestamp) >= 1 ORDER BY av.timestamp DESC LIMIT 1), ai.score)
+        END AS yesterday_score,
+        CASE
+            WHEN DATE(ai.last_update) = CURDATE() THEN NULL
+            ELSE RANK() OVER (ORDER BY COALESCE((SELECT av.score FROM allstarVoting AS av WHERE av.imageId = ai.id AND DATEDIFF(CURDATE(), av.timestamp) >= 1 ORDER BY av.timestamp DESC LIMIT 1), ai.score) DESC)
+        END AS yesterday_rank
+      FROM
+        allstarImages AS ai
+      group by ai.id
+      order by today_rank asc
+    ) as subquery
+    where subquery.userId = ?
+  `;
+
+  conn.query(sql, [userId], (err, result: OkPacket[]) => {
+    if (err) {
+      return res
+        .status(500)
+        .json({ status: 'error', message: 'Internal server error' });
+    }
+    res.status(200).json({ status: 'ok', data: result });
   });
 });

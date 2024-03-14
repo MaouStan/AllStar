@@ -18,6 +18,7 @@ import { DetailComponent } from './pages/admin/detail/detail.component';
 import { LayoutComponent } from './pages/layout/layout.component';
 import { Top10Component } from './pages/top10/top10.component';
 import { ProfileComponent } from './pages/profile/profile.component';
+import { NewProfileComponent } from './pages/new-profile/new-profile.component';
 
 export const routes: Routes = [
 
@@ -35,7 +36,7 @@ export const routes: Routes = [
       { path: 'change', component: ChangePasswordComponent, canActivate: [AuthGuard] },
       { path: 'top10', component: Top10Component },
       { path: 'upload', component: UploadComponent, canActivate: [AuthGuard] },
-      { path: 'profile', component: ProfileComponent },
+      { path: 'profile/:userId', component: NewProfileComponent },
     ]
   },
 
